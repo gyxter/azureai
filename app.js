@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 //auth keys are stored as envi vars
-const endpoint = process.env["AZURE_OPENAI_ENDPOINT"] ;
-const azureApiKey = process.env["AZURE_OPENAI_KEY"] ;
+const endpoint = "https://ai-sampler.openai.azure.com/";//process.env["AZURE_OPENAI_ENDPOINT"] ;
+const azureApiKey = "e27045c6c5f4408db31d464f9d98e843";//process.env["AZURE_OPENAI_KEY"] ;
 
 const app = express();
 const port = 3000;
