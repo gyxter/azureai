@@ -1,0 +1,16 @@
+{
+  "name": "azureai",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "gyle",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/openai": "^1.0.0-beta.10",
+    "express": "^4.17.1"
+  }
+}

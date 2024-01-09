@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask Me</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Open Sans', sans-serif; }
+    #prompt {
+      margin-bottom: 10px;
+    }
+    #inputText {
+      width: 500px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ask Me Anything:</h1>
+  <form action="/submit" method="post" onsubmit="return false;">
+    <input type="text" id="inputText" name="inputText" required>
+    <button type="submit" id="submitBtn">Submit</button>
+  </form>
+  <br>
+  <div id="prompt"></div>
+  <div id="output"></div>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $('#submitBtn').on('click',(e)=>{
+      const userInput = $('#inputText').val();
+      console.log(userInput)
+      $.ajax({
+        type:'post',
+        url: '/submit',
+        data:"inputText="+ encodeURIComponent(userInput),
+        success:(res, status)=>{
+          console.log(status)
+          if(status === 'success') {
+            $('#prompt').html('<strong>'+userInput+'</strong>:');
+            $('#output').text(res);
+          } else {
+            console.error('Request failed with status ' + status);
+          }
+        }
+      })
+    })
+  </script>
+</body>
+</html>
