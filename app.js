@@ -23,10 +23,12 @@ app.post('/submit', (req, res) => {
   let processedOutput = "";
   async function main() {
     console.log("== Get completions Sample ==");
-  
+    const completionOpts = {
+      maxTokens: 2000
+    }
     const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
     const deploymentId = "sampler";
-    const result = await client.getCompletions(deploymentId, userInput);
+    const result = await client.getCompletions(deploymentId, userInput, completionOpts);
   
     for (const choice of result.choices) {
       console.log(choice.text);

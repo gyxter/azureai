@@ -22,8 +22,10 @@
     <button type="submit" id="submitBtn">Submit</button>
   </form>
   <br>
+  <a href="#view" id="toggleBtn">View Code</a>
   <div id="prompt"></div>
-  <div id="output"></div>
+  <div id="codeRender" class="toggleView" style="display: none"><pre></pre></div>
+  <div id="htmlRender" class="toggleView"></div>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     $('#submitBtn').on('click',(e)=>{
@@ -37,12 +39,16 @@
           console.log(status)
           if(status === 'success') {
             $('#prompt').html('<strong>'+userInput+'</strong>:');
-            $('#output').text(res);
+            $('#codeRender pre').text(res);
+            $('#htmlRender').html(res);
           } else {
             console.error('Request failed with status ' + status);
           }
         }
       })
+    });
+    $('#toggleBtn').on('click',e=>{
+      $('.toggleView').toggle()
     })
   </script>
 </body>
