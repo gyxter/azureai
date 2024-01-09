@@ -10,6 +10,7 @@ const port = 3000;
 
 // Use middleware to parse the body of POST requests
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname));
 
 // Serve the static HTML file
 app.get('/', (req, res) => {
