@@ -1,9 +1,15 @@
 $('#submitBtn').on('click',(e)=>{
-    const userInput = $('#inputText').val();
+    const inputField = $('#inputText');
+    let userInput = '';
+    if(inputField.val().length === 0){
+      userInput = 'Generate'+inputField.prop('placeholder').split('e.g.')[1]
+    } else {
+      userInput = 'Generate'+inputField.val();
+    }
     $('#toggleBtn').hide();
     $('#prompt').html('')
-    $('#codeRender pre').text('')
-    $('#htmlRender iframe').attr('srcdoc','');
+    $('#codeRender pre').text('').removeClass('border border-info-subtle')
+    $('#htmlRender iframe').attr('srcdoc','').removeClass('border border-info-subtle');
     $.ajax({
       type:'post',
       url: '/submit',
@@ -15,8 +21,8 @@ $('#submitBtn').on('click',(e)=>{
         console.log(status)
         if(status === 'success') {
           $('#prompt').html('<strong>'+userInput+'</strong>:');
-          $('#codeRender pre').text(res);
-          $('#htmlRender iframe').attr('srcdoc',$('#codeRender pre').text());
+          $('#codeRender pre').text(res).addClass('border border-info-subtle');
+          $('#htmlRender iframe').attr('srcdoc',$('#codeRender pre').text()).addClass('border border-info-subtle');
         } else {
           console.error('Request failed with status ' + status);
         }
