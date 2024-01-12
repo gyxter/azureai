@@ -1,10 +1,14 @@
 $('#submitBtn').on('click',(e)=>{
     const inputField = $('#inputText');
+    const inputPage = $('#page').val();
+    const inputMood = $('#mood').val();
+    const inputTheme = $('#thcolor').val();
+    const inputPlImages = $('input[name="plimages"]:checked').val();
     let userInput = '';
     if(inputField.val().length === 0){
-      userInput = 'Create'+inputField.prop('placeholder').split('e.g.')[1]
+      userInput = 'Generate'+inputField.prop('placeholder').split('e.g.')[1]
     } else {
-      userInput = 'Create '+inputField.val();
+      userInput = 'Generate responsive '+inputPage+' that has a header and footer with '+inputMood+' styling in '+inputTheme+' theme, '+inputPlImages+', '+inputField.val()+'.';
     }
     $('#toggleBtn').hide();
     $('#prompt').html('')
