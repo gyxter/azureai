@@ -2,9 +2,9 @@ $('#submitBtn').on('click',(e)=>{
     const inputField = $('#inputText');
     let userInput = '';
     if(inputField.val().length === 0){
-      userInput = 'Generate'+inputField.prop('placeholder').split('e.g.')[1]
+      userInput = 'Create'+inputField.prop('placeholder').split('e.g.')[1]
     } else {
-      userInput = 'Generate'+inputField.val();
+      userInput = 'Create '+inputField.val();
     }
     $('#toggleBtn').hide();
     $('#prompt').html('')
@@ -12,7 +12,7 @@ $('#submitBtn').on('click',(e)=>{
     $('#htmlRender iframe').attr('srcdoc','').removeClass('border border-info-subtle');
     $.ajax({
       type:'post',
-      url: '/submit',
+      url: 'http://localhost:3000/submit',
       data:"inputText="+ encodeURIComponent(userInput),
       beforeSend: ()=>{
         $('#loading').show();
@@ -32,7 +32,7 @@ $('#submitBtn').on('click',(e)=>{
     })
   });
   $('#toggleBtn').on('click',e=>{
-    const _this = $(e.currentTarget);
+    const _this = $(e.currentTarget); 
     if(_this.text().indexOf('Code') !== -1){
       _this.text('View Render');
     } else {
