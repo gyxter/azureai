@@ -1,6 +1,5 @@
-body { font-family: 'Open Sans', sans-serif; }
-button{
-  font-weight: bold;
+body { 
+  font-family: 'Open Sans', sans-serif; 
 }
 #prompt {
   margin-bottom: 10px;
@@ -55,33 +54,10 @@ svg {
   animation-duration: 2s;
   transition-timing-function: ease-in-out;
 }
-
-.s1 {
-  animation-name: slide-1;
-}
-
-.s2 {
-  animation-name: slide-2;
-}
-
-.s3 {
-  animation-name: slide-3;
-}
-
-.s4 {
-  animation-name: slide-4;
-}
-
-.s5 {
-  animation-name: slide-5;
-}
-
-.s6 {
-  animation-name: slide-6;
-}
-
-.s7 {
-  animation-name: slide-7;
+@for $i from 1 through 7 {
+  .s#{$i} {
+    animation-name: slide-#{$i};
+  }
 }
 
 @keyframes slide-1 {

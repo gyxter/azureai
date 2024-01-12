@@ -8,7 +8,7 @@ $('#submitBtn').on('click',(e)=>{
     if(inputField.val().length === 0){
       userInput = 'Generate'+inputField.prop('placeholder').split('e.g.')[1]
     } else {
-      userInput = 'Generate responsive '+inputPage+' that has a header and footer with '+inputMood+' styling in '+inputTheme+' theme, '+inputPlImages+', '+inputField.val()+'.';
+      userInput = 'Generate responsive '+inputPage+' that has a header and footer with '+inputMood+' styling in '+inputTheme+' theme, with '+inputPlImages+', '+inputField.val()+'.';
     }
     $('#toggleBtn').hide();
     $('#prompt').html('')
