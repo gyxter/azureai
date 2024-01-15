@@ -28,6 +28,9 @@ $('#submitBtn').on('click',(e)=>{
         }
         $('#loading').hide();
         $('#toggleBtn').show();
+      },
+      error: function (request, status, error) {
+        console.log("ERROR: " + request.responseText);
       }
     })
   });

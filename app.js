@@ -28,6 +28,7 @@ app.post('/submit', (req, res) => {
       maxTokens: 2000
     }
     const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
+    
     const deploymentId = "sampler";
     const result = await client.getCompletions(deploymentId, userInput, completionOpts);
   
