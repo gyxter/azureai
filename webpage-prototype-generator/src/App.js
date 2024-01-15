@@ -2,6 +2,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import { useState } from "react";
 import Loading from "./components/Loading";
+import CodeRender from "./components/CodeRender";
+import HtmlRender from "./components/HtmlRender";
 
 import OPENAI_ENDPOINT from "./config/openai-endpoint";
 import OPENAI_API_KEY from "./config/openai-api-key";
@@ -19,9 +21,14 @@ function App() {
       OPENAI_ENDPOINT,
       new AzureKeyCredential(OPENAI_API_KEY)
     );
-          
+    // show loading before api call
     setShowLoading(true);
 
+    //reset value before submit
+    setProcessedOutput("");
+    setShowCode(false);
+    
+    //api call
     try {
       await client
         .getCompletions("deployment-openai-dev-j", userInput, {
@@ -41,10 +48,23 @@ function App() {
     }
   }
 
-  function handleToggleShowCode(){
+  function handleToggleShowCode() {
     showCode ? setShowCode(false) : setShowCode(true);
-    
   }
+
+  let renderOutput;
+  if (processedOutput !== "") {
+    if (showCode) {
+      renderOutput = (
+        <CodeRender processedOutput={processedOutput} className="" />
+      );
+    } else {
+      renderOutput = (
+        <HtmlRender processedOutput={processedOutput} className="" />
+      );
+    }
+  }
+
   return (
     <div className="App">
       <div className="container">
@@ -107,6 +127,7 @@ function App() {
               type="submit"
               id="submitBtn"
               className="btn btn-primary"
+              disabled={showLoading ? true : false}
               onClick={callOpenAIAPI}
             >
               Generate
@@ -117,35 +138,19 @@ function App() {
       <div className="container">
         <div className="row">
           <div className="col-12">
-
-            { processedOutput != "" &&
-              <div>
+            <div className={processedOutput !== "" ? "d-block" : "d-none"}>
               <a href="#view" id="toggleBtn" onClick={handleToggleShowCode}>
-                View {showCode? "Render" : "Code"}
+                View {showCode ? "Render" : "Code"}
               </a>
-              <div id="prompt"><strong>{userInput}</strong></div>
+              <div id="prompt">
+                <strong>{userInput}</strong>
               </div>
-            }
-            
+            </div>
 
-            {(processedOutput != "" && showCode) &&
-              <div id="codeRender" className="toggleView">
-                <pre>{processedOutput}</pre>
-              </div>
-            }
-            
-                
             {showLoading && <Loading />}
 
-            {(processedOutput != "" && !showCode) &&
-              <div id="htmlRender" className="toggleView">
-                <iframe
-                  title="html render"
-                  srcDoc={processedOutput}
-                  className=""
-                ></iframe>
-              </div>
-            }
+            {/* render output */}
+            {renderOutput}
           </div>
         </div>
       </div>
