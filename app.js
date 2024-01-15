@@ -19,6 +19,9 @@ app.get('/', (req, res) => {
 
 // Handle form submission
 app.post('/submit', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
   const userInput = req.body.inputText;
   // You can perform any processing on the user input here
   let processedOutput = "";

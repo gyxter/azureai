@@ -5,12 +5,23 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "serve": "gulp default --gulpfile gulpfile.js"
   },
   "author": "gyle",
   "license": "ISC",
   "dependencies": {
     "@azure/openai": "^1.0.0-beta.10",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-replace": "^1.1.4",
+    "gulp-watch": "^5.0.1",
+    "gulp-webserver": "^0.9.1"
+  },
+  "devDependencies": {
+    "gulp-sass": "^5.1.0",
+    "gulp-strip-comments": "^2.6.0",
+    "sass": "^1.69.7"
   }
 }
