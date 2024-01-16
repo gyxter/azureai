@@ -5,21 +5,21 @@ import Loading from "./components/Loading";
 import CodeRender from "./components/CodeRender";
 import HtmlRender from "./components/HtmlRender";
 
-import OPENAI_ENDPOINT from "./config/openai-endpoint";
-import OPENAI_API_KEY from "./config/openai-api-key";
+import OPENAI from "./config/openai";
 
 import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
+import React from "react";
 
-function App() {
-  const [userInput, setUserInput] = useState("");
+export default function App() {
+  let [userInput, setUserInput] = useState<any | null>(null);
   const [processedOutput, setProcessedOutput] = useState("");
   const [showLoading, setShowLoading] = useState(false);
   const [showCode, setShowCode] = useState(false);
 
   async function callOpenAIAPI() {
     const client = new OpenAIClient(
-      OPENAI_ENDPOINT,
-      new AzureKeyCredential(OPENAI_API_KEY)
+      OPENAI.ENDPOINT,
+      new AzureKeyCredential(OPENAI.API_KEY)
     );
     // show loading before api call
     setShowLoading(true);
@@ -27,7 +27,7 @@ function App() {
     //reset value before submit
     setProcessedOutput("");
     setShowCode(false);
-    
+
     //api call
     try {
       await client
@@ -37,8 +37,6 @@ function App() {
         .then((result) => {
           setShowLoading(false);
           for (const choice of result.choices) {
-            console.log(choice.text);
-            console.log(result);
             setProcessedOutput(choice.text);
           }
         });
@@ -56,11 +54,11 @@ function App() {
   if (processedOutput !== "") {
     if (showCode) {
       renderOutput = (
-        <CodeRender processedOutput={processedOutput} className="" />
+        <CodeRender processedOutput={processedOutput} />
       );
     } else {
       renderOutput = (
-        <HtmlRender processedOutput={processedOutput} className="" />
+        <HtmlRender processedOutput={processedOutput} />
       );
     }
   }
@@ -114,7 +112,6 @@ function App() {
               </label>
               <textarea
                 className="form-control form-textarea"
-                type="text"
                 id="inputText"
                 name="inputText"
                 placeholder="e.g. a portfolio website html with design styling and placeholder images"
@@ -157,5 +154,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
