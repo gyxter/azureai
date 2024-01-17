@@ -1,25 +1,27 @@
+import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import { useState } from "react";
+import OPENAI from "./config/openai";
+import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
+
+//https://www.npmjs.com/package/js-file-download
+import fileDownload from "js-file-download";
+
 import Loading from "./components/Loading";
 import CodeRender from "./components/CodeRender";
 import HtmlRender from "./components/HtmlRender";
 
-import OPENAI_ENDPOINT from "./config/openai-endpoint";
-import OPENAI_API_KEY from "./config/openai-api-key";
-
-import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
-
-function App() {
-  const [userInput, setUserInput] = useState("");
+export default function App() {
+  let [userInput, setUserInput] = useState<any | null>(null);
   const [processedOutput, setProcessedOutput] = useState("");
   const [showLoading, setShowLoading] = useState(false);
   const [showCode, setShowCode] = useState(false);
 
   async function callOpenAIAPI() {
     const client = new OpenAIClient(
-      OPENAI_ENDPOINT,
-      new AzureKeyCredential(OPENAI_API_KEY)
+      OPENAI.ENDPOINT,
+      new AzureKeyCredential(OPENAI.API_KEY)
     );
     // show loading before api call
     setShowLoading(true);
@@ -27,7 +29,7 @@ function App() {
     //reset value before submit
     setProcessedOutput("");
     setShowCode(false);
-    
+
     //api call
     try {
       await client
@@ -37,8 +39,6 @@ function App() {
         .then((result) => {
           setShowLoading(false);
           for (const choice of result.choices) {
-            console.log(choice.text);
-            console.log(result);
             setProcessedOutput(choice.text);
           }
         });
@@ -52,15 +52,19 @@ function App() {
     showCode ? setShowCode(false) : setShowCode(true);
   }
 
+  function handleDownload() {
+    fileDownload(processedOutput, "sample.html");
+  }
+
   let renderOutput;
   if (processedOutput !== "") {
     if (showCode) {
       renderOutput = (
-        <CodeRender processedOutput={processedOutput} className="" />
+        <CodeRender processedOutput={processedOutput} />
       );
     } else {
       renderOutput = (
-        <HtmlRender processedOutput={processedOutput} className="" />
+        <HtmlRender processedOutput={processedOutput} />
       );
     }
   }
@@ -114,7 +118,6 @@ function App() {
               </label>
               <textarea
                 className="form-control form-textarea"
-                type="text"
                 id="inputText"
                 name="inputText"
                 placeholder="e.g. a portfolio website html with design styling and placeholder images"
@@ -142,6 +145,9 @@ function App() {
               <a href="#view" id="toggleBtn" onClick={handleToggleShowCode}>
                 View {showCode ? "Render" : "Code"}
               </a>
+              <button id="dlBtn" type="button" className="btn btn-info ml-2" onClick={handleDownload}>
+                Download
+              </button>
               <div id="prompt">
                 <strong>{userInput}</strong>
               </div>
@@ -157,5 +163,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
