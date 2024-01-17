@@ -1,14 +1,16 @@
+import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import { useState } from "react";
+import OPENAI from "./config/openai";
+import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
+
+//https://www.npmjs.com/package/js-file-download
+import fileDownload from "js-file-download";
+
 import Loading from "./components/Loading";
 import CodeRender from "./components/CodeRender";
 import HtmlRender from "./components/HtmlRender";
-
-import OPENAI from "./config/openai";
-
-import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
-import React from "react";
 
 export default function App() {
   let [userInput, setUserInput] = useState<any | null>(null);
@@ -48,6 +50,10 @@ export default function App() {
 
   function handleToggleShowCode() {
     showCode ? setShowCode(false) : setShowCode(true);
+  }
+
+  function handleDownload() {
+    fileDownload(processedOutput, "sample.html");
   }
 
   let renderOutput;
@@ -139,6 +145,9 @@ export default function App() {
               <a href="#view" id="toggleBtn" onClick={handleToggleShowCode}>
                 View {showCode ? "Render" : "Code"}
               </a>
+              <button id="dlBtn" type="button" className="btn btn-info ml-2" onClick={handleDownload}>
+                Download
+              </button>
               <div id="prompt">
                 <strong>{userInput}</strong>
               </div>
