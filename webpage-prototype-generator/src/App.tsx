@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import { useState } from "react";
-import OPENAI from "./config/openai";
+import CONFIG_OPENAI from "./config/openai";
 import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
 
 //https://www.npmjs.com/package/js-file-download
@@ -20,8 +20,8 @@ export default function App() {
 
   async function callOpenAIAPI() {
     const client = new OpenAIClient(
-      OPENAI.ENDPOINT,
-      new AzureKeyCredential(OPENAI.API_KEY)
+      CONFIG_OPENAI.ENDPOINT,
+      new AzureKeyCredential(CONFIG_OPENAI.API_KEY)
     );
     // show loading before api call
     setShowLoading(true);
@@ -33,7 +33,7 @@ export default function App() {
     //api call
     try {
       await client
-        .getCompletions("deployment-openai-dev-j", userInput, {
+        .getCompletions(CONFIG_OPENAI.DEPLOYMENT_NAME, userInput, {
           maxTokens: 2000,
         })
         .then((result) => {
