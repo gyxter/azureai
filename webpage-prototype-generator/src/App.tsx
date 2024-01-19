@@ -21,7 +21,7 @@ export default function App() {
   const [selectedOption, setSelectedOption] = useState<string>('Home Page');
   const [selectedOption1, setSelectedOption1] = useState<string>('Professional');
   const [checkBoxValues, setCheckBoxValues] = useState<{ [key: string]: boolean }>({});
-  const [textAreaValue, setTextAreaValue] = useState<any | null>(null);
+  const [textAreaValue, setTextAreaValue] = useState<any | null>('');
   const [radioOption, setRadioOption] = useState<string>('');
 
   const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -48,10 +48,11 @@ export default function App() {
   };
 
   const assembledPrompt : any = `Generate responsive html for a ${selectedOption} that has a header and footer section and also with the following attributes:
-    - ${selectedOption1} theme
-    - has ${Object.keys(checkBoxValues).filter((key) => checkBoxValues[key]).join(', ')}
-    - ${textAreaValue}
-    - in page css styling
+    ${selectedOption1} theme
+    ${Object.keys(checkBoxValues).length > 0 ? ', has '+ Object.keys(checkBoxValues).filter((key) => checkBoxValues[key]).join(', ') : ''}
+    ${textAreaValue.length !== 0 ? ', '+textAreaValue : ''}
+    , has in page css styling, 
+    ${radioOption.length !== 0 ? radioOption : ''}
   `;
   async function callOpenAIAPI() {
     const client = new OpenAIClient(
