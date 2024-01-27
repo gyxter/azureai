@@ -13,11 +13,47 @@ import CodeRender from "./components/CodeRender";
 import HtmlRender from "./components/HtmlRender";
 
 export default function App() {
-  let [userInput, setUserInput] = useState<any | null>(null);
+  /* let [userInput, setUserInput] = useState<any | null>(null); */
   const [processedOutput, setProcessedOutput] = useState("");
   const [showLoading, setShowLoading] = useState(false);
   const [showCode, setShowCode] = useState(false);
 
+  const [selectedOption, setSelectedOption] = useState<string>('Home Page');
+  const [selectedOption1, setSelectedOption1] = useState<string>('Professional');
+  const [checkBoxValues, setCheckBoxValues] = useState<{ [key: string]: boolean }>({});
+  const [textAreaValue, setTextAreaValue] = useState<any | null>('');
+  const [radioOption, setRadioOption] = useState<string>('');
+
+  const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const handleMoodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption1(event.target.value);
+  };
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRadioOption(event.target.value);
+  };
+
+  const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckBoxValues({
+      ...checkBoxValues,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextAreaValue(event.target.value);
+  };
+
+  const assembledPrompt : any = `Generate responsive html for a ${selectedOption} that has a header and footer section and also with the following attributes:
+    ${selectedOption1} theme
+    ${Object.keys(checkBoxValues).length > 0 ? ', has '+ Object.keys(checkBoxValues).filter((key) => checkBoxValues[key]).join(', ') : ''}
+    ${textAreaValue.length !== 0 ? ', '+textAreaValue : ''}
+    , has in page css styling, 
+    ${radioOption.length !== 0 ? radioOption : ''}
+  `;
   async function callOpenAIAPI() {
     const client = new OpenAIClient(
       CONFIG_OPENAI.ENDPOINT,
@@ -33,7 +69,7 @@ export default function App() {
     //api call
     try {
       await client
-        .getCompletions(CONFIG_OPENAI.DEPLOYMENT_NAME, userInput, {
+        .getCompletions(CONFIG_OPENAI.DEPLOYMENT_NAME, assembledPrompt, {
           maxTokens: 2000,
         })
         .then((result) => {
@@ -76,17 +112,17 @@ export default function App() {
           <div className="col-12">
             <h1 className="my-3">Webpage prototype Generator:</h1>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label" htmlFor="page">
                 Page:{" "}
               </label>
               <br />
-              <select id="mood" name="mood" className="form-select">
-                <option value="HomePage">Home page</option>
-                <option value="About">About</option>
-                <option value="Services">Services</option>
-                <option value="Contact">Contact</option>
+              <select id="page" name="page" className="form-select" value={selectedOption} onChange={handlePageChange}>
+                <option value="Home Page">Home page</option>
+                <option value="About Page">About</option>
+                <option value="Services Page">Services</option>
+                <option value="Contact Page">Contact</option>
               </select>
             </div>
             <div className="mb-3">
@@ -94,21 +130,83 @@ export default function App() {
                 Mood:{" "}
               </label>
               <br />
-              <select id="mood" name="mood" className="form-select">
+              <select id="mood" name="mood" className="form-select" value={selectedOption1} onChange={handleMoodChange}>
                 <option value="Professional">Professional</option>
                 <option value="Fancy">Fancy</option>
                 <option value="Business">Business</option>
               </select>
             </div>
             <div className="mb-3">
-              <label className="form-label" htmlFor="thcolor">
-                Theme:{" "}
+              <label className="form-label" htmlFor="components">
+                Components:{" "}
               </label>
               <br />
-              <select id="thcolor" name="thcolor" className="form-select">
-                <option value="Dark">Dark</option>
-                <option value="Light">Light</option>
-              </select>
+              <label htmlFor="cta" className="me-3">
+                <input
+                  type="checkbox"
+                  name="cta"
+                  id="cta"
+                  checked={checkBoxValues.cta || false}
+                  onChange={handleCheckBoxChange}
+                  className="me-1"
+                />
+                CTAs
+              </label>
+
+              <label htmlFor="hero" className="me-3">
+                <input
+                  type="checkbox"
+                  name="hero"
+                  id="hero"
+                  checked={checkBoxValues.hero || false}
+                  onChange={handleCheckBoxChange}
+                  className="me-1"
+                />
+                Hero Banner
+              </label>
+
+              <label htmlFor="carousel">
+                <input
+                  type="checkbox"
+                  name="carousel"
+                  id="carousel"
+                  checked={checkBoxValues.carousel || false}
+                  onChange={handleCheckBoxChange}
+                  className="me-1"
+                />
+                Carousel
+              </label>
+            </div>
+            <div className="mb-3">
+              <label className="form-label" htmlFor="plImages">
+                Placeholder images:{" "}
+              </label>
+              <br />
+              <label htmlFor="plImagesY" className="me-3">
+                <input
+                  type="radio"
+                  name="plImages"
+                  id="plImagesY"
+                  value="with placeholder images"
+                  checked={radioOption === 'with placeholder images'}
+                  onChange={handleRadioChange}
+                  className="me-1"
+                />
+                Yes
+              </label>
+
+              <label htmlFor="plImagesN">
+                <input
+                  type="radio"
+                  name="plImages"
+                  value=""
+                  id="plImagesN"
+                  checked={radioOption === ''}
+                  onChange={handleRadioChange}
+                  className="me-1"
+                />
+                No
+              </label>
             </div>
           </div>
           <div className="col-md-6">
@@ -121,9 +219,8 @@ export default function App() {
                 id="inputText"
                 name="inputText"
                 placeholder="e.g. a portfolio website html with design styling and placeholder images"
-                onChange={(e) => {
-                  setUserInput(e.target.value);
-                }}
+                value={textAreaValue} 
+                onChange={handleTextAreaChange}
               ></textarea>
             </div>
             <button
@@ -149,7 +246,7 @@ export default function App() {
                 Download
               </button>
               <div id="prompt">
-                <strong>{userInput}</strong>
+                <strong>{assembledPrompt}</strong>
               </div>
             </div>
 
