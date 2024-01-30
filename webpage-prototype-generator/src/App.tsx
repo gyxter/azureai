@@ -22,20 +22,11 @@ export default function App() {
   const [showCode, setShowCode] = useState(false);
   const [assembledPrompt, setAssembledPrompt] = useState("");
 
-  
-  // function  handleShowloading(isShow: boolean | ((prevState: boolean) => boolean)){
-  //   setShowLoading(isShow)
-  // }
-  // function  handleShowCode(isShow: boolean | ((prevState: boolean) => boolean)){
-  //   setShowCode(isShow)
-  // }
-
-
-  function handleToggleShowCode() {
+  const handleToggleShowCode = ()=> {
     showCode ? setShowCode(false) : setShowCode(true);
   }
 
-  function handleDownload() {
+  const handleDownload = ()=> {
     fileDownload(processedOutput, "sample.html");
   }
 
