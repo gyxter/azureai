@@ -38,7 +38,6 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
     };
 
     function handleFormSubmit() {
-        console.log('form');
         let assembledPrompt = `Generate responsive html for a ${selectedOption} that has a header and footer section and also with the following attributes:
     ${selectedOption1} theme
     ${Object.keys(checkBoxValues).length > 0 ? ', has ' + Object.keys(checkBoxValues).filter((key) => checkBoxValues[key]).join(', ') : ''}
@@ -49,13 +48,6 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
         handleSubmit(assembledPrompt);
     }
 
-
-
-
-    // handleAssembledPrompt(assembledPrompt);
-
-
-
     return (
         <div>
             <div className="col-md-4">
@@ -64,7 +56,7 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                         Page:{" "}
                     </label>
                     <br />
-                    <select id="page" name="page" className="form-select" value={pages[0].name} onChange={handlePageChange}>
+                    <select id="page" name="page" className="form-select" onChange={handlePageChange}>
                         {pages.map((page) => (
                             <option key={page.name} value={page.name}>{page.text}</option>
                         ))}
@@ -75,7 +67,7 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                         Mood:{" "}
                     </label>
                     <br />
-                    <select id="mood" name="mood" className="form-select" value={moods[0].name} onChange={handleMoodChange}>
+                    <select id="mood" name="mood" className="form-select" onChange={handleMoodChange}>
                         {moods.map((mood) => (
                             <option key={mood.name} value={mood.name}>{mood.text}</option>
                         ))}
