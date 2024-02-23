@@ -1,12 +1,12 @@
 export const components = [
-    {name: "cta", text: "CTAs"},
+    {name: "call to action boxes", text: "Call to Action Boxes"},
     {name: "hero banner", text: "Hero Banner"},
     {name: "carousel", text: "Carousel"}
 ]
 
 export const moods = [
     {name: "Professional", text: "Professional"},
-    {name: "Fancy", text: "Fancy"},
+    {name: "Vibrant", text: "Vibrant"},
     {name: "Business", text: "Business"}
 ]
 
