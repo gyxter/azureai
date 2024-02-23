@@ -9,8 +9,8 @@ interface FormProps {
 }
 export function Form({ showLoading, handleSubmit }: FormProps) {
 
-    const [selectedOption, setSelectedOption] = useState<string>(pages[0].name);
-    const [selectedOption1, setSelectedOption1] = useState<string>(moods[0].name);
+    const [selectedPage, setSelectedOption] = useState<string>(pages[0].name);
+    const [selectedMood, setSelectedOption1] = useState<string>(moods[0].name);
     const [checkBoxValues, setCheckBoxValues] = useState<{ [key: string]: boolean }>({});
     const [textAreaValue, setTextAreaValue] = useState<any | null>('');
     const [radioOption, setRadioOption] = useState<string>('');
@@ -39,8 +39,8 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
     };
 
     function handleFormSubmit() {
-        let assembledPrompt = `Generate a responsive ${selectedOption} 
-        mark-up html with ${selectedOption1} theme styling. Add the styles in the head tag.
+        let assembledPrompt = `Generate a responsive ${selectedPage} 
+        mark-up html with ${selectedMood} theme styling. Add the styles in the head tag.
         Add a header html markup that contains a logo in the left column and 
         4 navigation items on the right column. 
         Also include the following components in the main content section:        
