@@ -58,13 +58,6 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
         handleSubmit(assembledPrompt);
     }
 
-
-
-
-    // handleAssembledPrompt(assembledPrompt);
-
-
-
     return (
         <div>
             <div className="col-md-4">
