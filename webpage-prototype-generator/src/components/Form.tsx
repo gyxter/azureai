@@ -49,12 +49,8 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
             : ''
         }
         ${textAreaValue.length !== 0 ? '- ' + textAreaValue : ''}
-        ${radioOption.length !== 0 
-            ? '- '+radioOption+'.' 
-            : '.'
-          }
-        `;
-        console.log(radioOption.length)
+        ${radioOption.length !== 0 ? '- ' + radioOption : '.' }`;
+        
         handleSubmit(assembledPrompt);
     }
 
