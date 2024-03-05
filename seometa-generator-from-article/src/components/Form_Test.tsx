@@ -1,75 +1,71 @@
 import React, { useState } from 'react'
 import { PageComponents } from './PageComponent';
 import { moods, pages } from '../utils/data';
-import "../App.css";
 
 interface FormProps {
-    showLoading: boolean,
-    handleSubmit: (assembledPrompt: string) => Promise<void>,
+    onSubmit: (data: UserData) => void,
+    showLoading: boolean
 }
-export function Form({ showLoading, handleSubmit }: FormProps) {
+export interface UserData {
+    page: string,
+    mood: string,
+    components: string[],
+    placeholderImages: string
+}
 
-    const [selectedPage, setSelectedOption] = useState<string>(pages[0].name);
-    const [selectedMood, setSelectedOption1] = useState<string>(moods[0].name);
-    const [checkBoxValues, setCheckBoxValues] = useState<{ [key: string]: boolean }>({});
-    const [textAreaValue, setTextAreaValue] = useState<any | null>('');
-    const [radioOption, setRadioOption] = useState<string>('');
+export function Form({ onSubmit, showLoading }: FormProps) {
 
-    const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedOption(event.target.value);
+    const [formData, setFormData] = useState<UserData>({ page: pages[0].name, mood: moods[0].name, components: [], placeholderImages: '' });
+    const [checkedValues, setCheckedValues] = useState<string[]>([]);
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
     };
 
-    const handleMoodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedOption1(event.target.value);
-    };
-
-    const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRadioOption(event.target.value);
-    };
-
-    const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCheckBoxValues({
-            ...checkBoxValues,
-            [event.target.name]: event.target.checked,
-        });
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setTextAreaValue(event.target.value);
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
     };
 
-    function handleFormSubmit() {
-        let assembledPrompt = `Generate a responsive ${selectedPage} with the following requirements:` +
-        `1. Webpage should have ${selectedMood} colored. ` +
-        `2. Webpage should be using bootstrap css. ` +
-        `3. Should have a header with placeholder image for the logo and 4 navigation links ` +
-        `4. It should have a footer with links ` +
-        `5. Also include the following components in the main content section: ` +       
-        `  ${Object.keys(checkBoxValues).length > 0 
-            ? 'a. ' + Object.keys(checkBoxValues).filter((key) => checkBoxValues[key]).join(', ') 
-            : ''
-        } ` +
-        `${textAreaValue.length !== 0 ? ' b. ' + textAreaValue : ''} ` +
-        `${radioOption.length !== 0 ? ' c. ' + radioOption : '.' } `; 
-        /* let assembledPrompt1 = "Generate a responsive email newsletter template with the following requirements:"+
-            "1. has header with subject." +
-            "2. has pre-header." +
-            "3. has placeholder body content and images." +
-            "3. has column CTA." +
-            "4. has footer." */
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        if (checked) {
+            // setFormData({...formData, 
+            //     components: 
+            // })
+            setCheckedValues(prevValues => [...prevValues, value]);
+        } else {
+            setCheckedValues(prevValues => prevValues.filter(item => item !== value));
+        }
+    };
 
-        handleSubmit(assembledPrompt);
-    }
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        
+        onSubmit(formData);
+    };
+
+
+
+
 
     return (
-        <div>
+
+        <form onSubmit={handleSubmit}>
+            {checkedValues}
             <div className="col-md-4">
                 <div className="mb-3">
                     <label className="form-label" htmlFor="page">
                         Page:{" "}
                     </label>
                     <br />
-                    <select id="page" name="page" className="form-select" onChange={handlePageChange}>
+                    <select id="page" name="page" className="form-select" value={formData.page} onChange={handleSelectChange}>
                         {pages.map((page) => (
                             <option key={page.name} value={page.name}>{page.text}</option>
                         ))}
@@ -80,7 +76,7 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                         Mood:{" "}
                     </label>
                     <br />
-                    <select id="mood" name="mood" className="form-select" onChange={handleMoodChange}>
+                    <select id="mood" name="mood" className="form-select" value={formData.mood} onChange={handleSelectChange}>
                         {moods.map((mood) => (
                             <option key={mood.name} value={mood.name}>{mood.text}</option>
                         ))}
@@ -92,8 +88,9 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                     </label>
                     <br />
 
-                    <PageComponents handleCheckBoxChange={handleCheckBoxChange} />
+                    {/* <PageComponents handleCheckboxChange={handleCheckboxChange} /> */}
 
+                    
                 </div>
                 <div className="mb-3">
                     <label className="form-label" htmlFor="plImages">
@@ -105,10 +102,8 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                             type="radio"
                             name="placeholderImages"
                             value="with placeholder images"
-                            onChange={handleRadioChange}
+                            onChange={handleInputChange}
                             className="me-1"
-                            checked
-                            id="plImagesY"
                         />
                         Yes
                     </label>
@@ -118,9 +113,8 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                             type="radio"
                             name="placeholderImages"
                             value=""
-                            onChange={handleRadioChange}
+                            onChange={handleInputChange}
                             className="me-1"
-                            id="plImagesN"
                         />
                         No
                     </label>
@@ -140,15 +134,14 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                     ></textarea>
                 </div>
                 <button
-                    type="button"
+                    type="submit"
                     id="submitBtn"
                     className="btn btn-primary"
                     disabled={showLoading ? true : false}
-                    onClick={handleFormSubmit}
                 >
                     Generate
                 </button>
             </div>
-        </div>
+        </form>
     );
 }
