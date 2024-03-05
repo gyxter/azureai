@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-/* import { PageComponents } from './PageComponent';
-import { moods, pages } from '../utils/data'; */
 import "../App.css";
 
 interface FormProps {
@@ -8,31 +6,6 @@ interface FormProps {
     handleSubmit: (assembledPrompt: string) => Promise<void>,
 }
 export function Form({ showLoading, handleSubmit }: FormProps) {
-
-   /*  const [selectedPage, setSelectedOption] = useState<string>(pages[0].name);
-    const [selectedMood, setSelectedOption1] = useState<string>(moods[0].name);
-    const [checkBoxValues, setCheckBoxValues] = useState<{ [key: string]: boolean }>({});
-    const [radioOption, setRadioOption] = useState<string>(''); */
-
-    /* const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedOption(event.target.value);
-    };
-
-    const handleMoodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedOption1(event.target.value);
-    };
-
-    const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRadioOption(event.target.value);
-    };
-
-    const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCheckBoxValues({
-            ...checkBoxValues,
-            [event.target.name]: event.target.checked,
-        });
-    }; */
-
     const [textAreaValue, setTextAreaValue] = useState<any | null>('');
 
     const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -57,12 +30,11 @@ Conclusion:
 In conclusion, XYZ-Health stands as a testament to the relentless pursuit of excellence in the field of medicine. Its revolutionary approach, combined with unparalleled clinical efficacy and a commitment to personalized care, has positioned it as a game-changer in healthcare. As we witness the transformative power of XYZ-Health, the future of medicine looks brighter than ever, promising improved outcomes and a better quality of life for countless individuals worldwide.
 */
     function handleFormSubmit() {
-       /*  let assembledPrompt = `Generate 3 samples SEO title, description and set of keywords from the article below. Format the samples in html list markup:` + */
-        
+       
        let assembledPrompt = 
         `${textAreaValue.length !== 0 ? ' ' + textAreaValue : ''} ` +
         `From the article above: Generate a stylized HTML table with 3 ordered list items. Each item should contain a labeled SEO title, a description, URL Structure, estimated page ranking out of 10 and an unordered list of keywords.`;
-        //`Can you generate 5 sample of SEO metadata each having the title, description, Header, URL Structure also ranking them based on the SEO Scores and display in a html table format`
+
         handleSubmit(assembledPrompt);
     }
 
