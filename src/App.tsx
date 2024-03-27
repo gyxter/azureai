@@ -42,7 +42,7 @@ export default function App() {
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    setProcessedOutput(text);
+    setProcessedOutput("<h3>Here are some Suggestions</h3>"+text);
     setShowLoading(false);
   };
   async function handleSubmit(_assembledPrompt: any) {
@@ -76,7 +76,7 @@ export default function App() {
         .then((result) => {
           setShowLoading(false);
           for (const choice of result.choices) {
-            setProcessedOutput(choice.text);
+            setProcessedOutput("<h3>Here are some Suggestions</h3>"+choice.text);
           }
         });
     } catch (error) {
