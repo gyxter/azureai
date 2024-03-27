@@ -24,11 +24,6 @@ export default function App() {
   const handleToggleShowCode = ()=> {
     showCode ? setShowCode(false) : setShowCode(true);
   }
-  /* 
-  const handleDownload = ()=> {
-    fileDownload(processedOutput, "sample.html");
-  } */
-
   
   const genAI = new GoogleGenerativeAI(
     CONFIG_OPENAI.API_KEY
