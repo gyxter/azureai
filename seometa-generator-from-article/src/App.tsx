@@ -4,19 +4,18 @@ import "./App.css";
 import { useState } from "react";
 
 //https://www.npmjs.com/package/js-file-download
-import fileDownload from "js-file-download";
+//import fileDownload from "js-file-download";
 
 import Loading from "./components/Loading";
-import CodeRender from "./components/CodeRender";
 import HtmlRender from "./components/HtmlRender";
 import { Form } from "./components/Form";
 
 import CONFIG_OPENAI from "./config/openai";
 import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
 
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function App() {
-  /* let [userInput, setUserInput] = useState<any | null>(null); */
   const [processedOutput, setProcessedOutput] = useState("");
   const [showLoading, setShowLoading] = useState(false);
   const [showCode, setShowCode] = useState(false);
@@ -25,25 +24,36 @@ export default function App() {
   const handleToggleShowCode = ()=> {
     showCode ? setShowCode(false) : setShowCode(true);
   }
-
+  /* 
   const handleDownload = ()=> {
     fileDownload(processedOutput, "sample.html");
-  }
+  } */
 
-  let renderOutput;
-  if (processedOutput !== "") {
-    if (showCode) {
-      renderOutput = (
-        <CodeRender processedOutput={processedOutput} />
-      );
-    } else {
-      renderOutput = (
-        <HtmlRender processedOutput={processedOutput} />
-      );
-    }
-  }
-
+  
+  const genAI = new GoogleGenerativeAI(
+    CONFIG_OPENAI.API_KEY
+  );
+  const fetchData = async (assembledPrompt: any) => {
+    //reset value before submit
+    setProcessedOutput("");
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const prompt = assembledPrompt;
+    setShowLoading(true);
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    setProcessedOutput(text);
+    setShowLoading(false);
+  };
   async function handleSubmit(_assembledPrompt: any) {
+    // show loading before api call
+
+    
+    setAssembledPrompt(_assembledPrompt);
+    fetchData(_assembledPrompt);
+  };
+
+  async function handleSubmit1(_assembledPrompt: any) {
     setAssembledPrompt(_assembledPrompt);
 
     const client = new OpenAIClient(
@@ -61,7 +71,7 @@ export default function App() {
     try {
       await client
         .getCompletions(CONFIG_OPENAI.DEPLOYMENT_NAME, _assembledPrompt, {
-          maxTokens: 5000,
+          maxTokens: 4000,
         })
         .then((result) => {
           setShowLoading(false);
@@ -76,13 +86,12 @@ export default function App() {
   }
 
 
-
   return (
     <div className="App">
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <h1 className="my-3">Webpage prototype Generator:</h1>
+            <h1 className="my-3">SEO MetaData Generator:</h1>
           </div>
 
           <Form showLoading={showLoading} handleSubmit={(assembledPrompt)=>handleSubmit(assembledPrompt)}/>
@@ -92,7 +101,7 @@ export default function App() {
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <div className={processedOutput !== "" ? "d-block" : "d-none"}>
+            {/* <div className={processedOutput !== "" ? "d-block" : "d-none"}>
               <a href="#view" id="toggleBtn" onClick={handleToggleShowCode}>
                 View {showCode ? "Render" : "Code"}
               </a>
@@ -102,12 +111,19 @@ export default function App() {
               <div id="prompt">
                 <strong>{assembledPrompt}</strong>
               </div>
-            </div>
+            </div> */}
 
+            <div id="prompt" className="my-3 d-none">
+              <a href="#view" id="toggleBtn" onClick={handleToggleShowCode}>
+                {showCode ? "Hide" : "View"} Prompt
+              </a>
+              <p className={showCode !== false ? "my-3 d-block" : "d-none"}><strong>Prompt: {assembledPrompt.split('<br/>')[1]}</strong></p>
+              
+            </div>
             {showLoading && <Loading />}
 
             {/* render output */}
-            {renderOutput}
+            <HtmlRender processedOutput={processedOutput} />
           </div>
         </div>
       </div>
