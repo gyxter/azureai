@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/azureai/static/css/main.89913537.css",
-    "main.js": "/azureai/static/js/main.0f91886c.js",
+    "main.js": "/azureai/static/js/main.97060213.js",
     "index.html": "/azureai/index.html",
     "main.89913537.css.map": "/azureai/static/css/main.89913537.css.map",
-    "main.0f91886c.js.map": "/azureai/static/js/main.0f91886c.js.map"
+    "main.97060213.js.map": "/azureai/static/js/main.97060213.js.map"
   },
   "entrypoints": [
     "static/css/main.89913537.css",
-    "static/js/main.0f91886c.js"
+    "static/js/main.97060213.js"
   ]
 }
