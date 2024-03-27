@@ -11,29 +11,24 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
     const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextAreaValue(event.target.value);
     };
-/*Title: "Revolutionizing Healthcare: The Breakthrough Medicine Transforming Lives"
-Introduction:
-In the ever-evolving landscape of healthcare, groundbreaking advancements continue to reshape the way we approach and treat various medical conditions. One such marvel is the revolutionary medicine, XYZ-Health, which has emerged as a beacon of hope for patients worldwide. XYZ-Health is not just a medication; it represents a transformative leap in medical science, offering unprecedented benefits for individuals grappling with a range of ailments.
-The Genesis of XYZ-Health:
-Developed after years of rigorous research and clinical trials, XYZ-Health is the result of collaboration between leading pharmaceutical experts, biochemists, and medical researchers. The genesis of this medicine lies in a deep understanding of molecular biology, genetics, and the intricate mechanisms underlying various diseases.
-Mechanism of Action:
-XYZ-Health boasts a novel mechanism of action that sets it apart from traditional treatments. By targeting specific molecular pathways implicated in the progression of diseases, this medicine acts with precision, minimizing side effects and maximizing therapeutic efficacy. The unique mode of action makes XYZ-Health a versatile solution for a spectrum of medical conditions.
-Clinical Efficacy:
-Clinical trials have demonstrated the remarkable efficacy of XYZ-Health in treating conditions such as [specific medical conditions]. Patients who were once burdened by the limitations of existing treatments found relief and improvement in their quality of life after incorporating XYZ-Health into their healthcare regimens.
-Personalized Medicine:
-One of the most noteworthy aspects of XYZ-Health is its potential for personalized medicine. Tailored to individual genetic profiles and disease characteristics, this medicine heralds a new era where treatment plans are customized for each patient, optimizing outcomes and reducing adverse effects.
-Safety Profile:
-Safety is paramount in any medication, and XYZ-Health excels in this aspect. Extensive safety assessments have been conducted, and the medicine has shown a favorable safety profile with minimal adverse effects. This makes XYZ-Health a viable option for long-term use, ensuring sustained therapeutic benefits.
-Global Impact:
-As XYZ-Health gains regulatory approval and reaches global markets, its impact on public health is becoming increasingly evident. Countries around the world are integrating this innovative medicine into their healthcare systems, providing new hope for patients who had exhausted conventional treatment options.
-Conclusion:
-In conclusion, XYZ-Health stands as a testament to the relentless pursuit of excellence in the field of medicine. Its revolutionary approach, combined with unparalleled clinical efficacy and a commitment to personalized care, has positioned it as a game-changer in healthcare. As we witness the transformative power of XYZ-Health, the future of medicine looks brighter than ever, promising improved outcomes and a better quality of life for countless individuals worldwide.
-*/
     function handleFormSubmit() {
+       let promptGpt35Instruct = `From this Post, ` +
+       `Generate HTML table code with 5 rows. `+
+       `Each row MUST have the values of the table columns: `+
+       `Meta title, Meta description, URL Structure and Meta keywords.`
        
+       let promptGpt35 = `From this Post, generate 5 values of Meta title, Meta description, URL Structure and Meta keywords and add them as table rows inside <tbody> below:`+
+       `<table><thead><tr><th>Meta title</th><th>Meta description</th><th>URL Structure</th><th>Meta keywords</th></tr></thead><tbody></tbody></table>`
+
        let assembledPrompt = 
-        `${textAreaValue.length !== 0 ? ' ' + textAreaValue : ''} ` +
-        `From the article above: Generate a stylized HTML table with 3 ordered list items. Each item should contain a labeled SEO title, a description, URL Structure, estimated page ranking out of 10 and an unordered list of keywords.`;
+        `---Post: """${textAreaValue.length !== 0 ? ' ' + textAreaValue : ''}"""---` +
+        `---`+promptGpt35+`---`
+       /*  `From this article: Come up with SEO Metadata and list 5 samples in an HTML table format with 5 columns containing:`+
+        `1. Title`+
+        `2. Descrption`+
+        `3. URL structure`+
+        `4. Page ranking`+
+        `5. A list of keywords.`; */
 
         handleSubmit(assembledPrompt);
     }
@@ -51,13 +46,14 @@ In conclusion, XYZ-Health stands as a testament to the relentless pursuit of exc
                         name="inputText"
                         placeholder=""
                         onChange={handleTextAreaChange}
-                    ></textarea>
+                    >
+                    </textarea>
                 </div>
                 <button
                     type="button"
                     id="submitBtn"
                     className="btn btn-primary"
-                    disabled={showLoading ? true : false}
+                    disabled={showLoading || textAreaValue.length === 0 ? true : false}
                     onClick={handleFormSubmit}
                 >
                     Generate

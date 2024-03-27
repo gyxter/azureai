@@ -16,18 +16,41 @@ body { font-family: 'Open Sans', sans-serif; }
 .toggleView {
   width: 100%;
 }
+#prompt {
+  font-size:14px;
+}
+.toggleView table,
+.toggleView td,
+.toggleView th {
+  border: 2px solid black;
+}
+.toggleView td,
+.toggleView th {
+  padding: 0 10px;
+}
 .form-select {
   height: inherit;
   width: 100%;
 }
-.btn-primary {
+.btn-primary,
+.btn-primary:focus {
   height: 40px;
   font-size: 14px;
   padding: 0 10px;
   background-color: darkmagenta;
   border-radius: 10px;
   color: white;
-  border: 2px solid darkmagenta;;
+  border: 2px solid darkmagenta;
+}
+.btn-primary:hover,
+.btn.btn-primary:active,
+.btn.btn-primary:focus-visible{
+  background-color:purple;
+  border: 2px solid transparent;
+}
+.btn-primary[disabled]{
+  background-color:rgba(139, 0, 139,0.5);
+  border: 2px solid transparent;
 }
 #dlBtn{
   color: white;
@@ -41,129 +64,220 @@ iframe {
   width: 100%;
   height: 70vh;
 }
-svg {
-  transform: rotate(45deg);
+#loading svg {
+  transform: rotate(45deg) scale(0.7);
+
+}
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  height: 96px;
+  width: 96px;
+  animation: rotate_3922 1.2s linear infinite;
+  background-color: #9b59b6;
+  background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
 }
 
-.gradient {
+.loader span {
+  position: absolute;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  background-color: #9b59b6;
+  background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+}
+
+.loader span:nth-of-type(1) {
+  filter: blur(5px);
+}
+
+.loader span:nth-of-type(2) {
+  filter: blur(10px);
+}
+
+.loader span:nth-of-type(3) {
+  filter: blur(25px);
+}
+
+.loader span:nth-of-type(4) {
+  filter: blur(50px);
+}
+
+.loader::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  background-color: #fff;
+  border: solid 5px #ffffff;
+  border-radius: 50%;
+}
+
+@keyframes rotate_3922 {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+.🤚 {
+  --skin-color: #E4C560;
+  --tap-speed: 0.6s;
+  --tap-stagger: 0.1s;
+  position: relative;
+  width: 80px;
+  height: 60px;
+  margin-left: 80px;
+  transform: scale(0.5);
+  top: -50px;
+  left: 40px;
+}
+
+.🤚:before {
+  content: '';
+  display: block;
+  width: 180%;
+  height: 75%;
+  position: absolute;
+  top: 70%;
+  right: 20%;
+  background-color: black;
+  border-radius: 40px 10px;
+  filter: blur(10px);
+  opacity: 0.3;
+}
+
+.🌴 {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--skin-color);
+  border-radius: 10px 40px;
+}
+
+.👍 {
+  position: absolute;
+  width: 120%;
+  height: 38px;
+  background-color: var(--skin-color);
+  bottom: -18%;
+  right: 1%;
+  transform-origin: calc(100% - 20px) 20px;
+  transform: rotate(-20deg);
+  border-radius: 30px 20px 20px 10px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-left: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.👍:after {
+  width: 20%;
+  height: 60%;
+  content: '';
+  background-color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+  bottom: -8%;
+  left: 5px;
+  border-radius: 60% 10% 10% 30%;
+  border-right: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.👉 {
+  position: absolute;
+  width: 80%;
+  height: 35px;
+  background-color: var(--skin-color);
+  bottom: 32%;
+  right: 64%;
+  transform-origin: 100% 20px;
+  animation-duration: calc(var(--tap-speed) * 2);
+  animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-  animation-duration: 1s;
-  fill: url('#gradient-fill');
-}
-.square {
-  animation-iteration-count: infinite;
-  animation-duration: 2s;
-  transition-timing-function: ease-in-out;
+  transform: rotate(10deg);
 }
 
-.s1 {
-  animation-name: slide-1;
+.👉:before {
+  content: '';
+  position: absolute;
+  width: 140%;
+  height: 30px;
+  background-color: var(--skin-color);
+  bottom: 8%;
+  right: 65%;
+  transform-origin: calc(100% - 20px) 20px;
+  transform: rotate(-60deg);
+  border-radius: 20px;
 }
 
-.s2 {
-  animation-name: slide-2;
+.👉:nth-child(1) {
+  animation-delay: 0;
+  filter: brightness(70%);
+  animation-name: tap-upper-1;
 }
 
-.s3 {
-  animation-name: slide-3;
+.👉:nth-child(2) {
+  animation-delay: var(--tap-stagger);
+  filter: brightness(80%);
+  animation-name: tap-upper-2;
 }
 
-.s4 {
-  animation-name: slide-4;
+.👉:nth-child(3) {
+  animation-delay: calc(var(--tap-stagger) * 2);
+  filter: brightness(90%);
+  animation-name: tap-upper-3;
 }
 
-.s5 {
-  animation-name: slide-5;
+.👉:nth-child(4) {
+  animation-delay: calc(var(--tap-stagger) * 3);
+  filter: brightness(100%);
+  animation-name: tap-upper-4;
 }
 
-.s6 {
-  animation-name: slide-6;
-}
-
-.s7 {
-  animation-name: slide-7;
-}
-
-@keyframes slide-1 {
-  37.5% {
-    transform: translateX(0px);
+@keyframes tap-upper-1 {
+  0%, 50%, 100% {
+    transform: rotate(10deg) scale(0.4);
   }
-  50% {
-    transform: translateX(100px);
-  }
-  100% {
-    transform: translateX(100px);
-  }
-}
 
-@keyframes slide-2 {
-  25% {
-    transform: translateX(0px);
-  }
-  37.5% {
-    transform: translateX(100px);
-  }
-  100% {
-    transform: translateX(100px);
+  40% {
+    transform: rotate(50deg) scale(0.4);
   }
 }
 
-@keyframes slide-3 {
-  12.5% {
-    transform: translateY(0px);
+@keyframes tap-upper-2 {
+  0%, 50%, 100% {
+    transform: rotate(10deg) scale(0.6);
   }
-  25% {
-    transform: translateY(100px);
-  }
-  100% {
-    transform: translateY(100px);
+
+  40% {
+    transform: rotate(50deg) scale(0.6);
   }
 }
 
-@keyframes slide-4 {
-  50% {
-    transform: translateY(0px);
+@keyframes tap-upper-3 {
+  0%, 50%, 100% {
+    transform: rotate(10deg) scale(0.8);
   }
-  62.5% {
-    transform: translateY(-100px);
-  }
-  100% {
-    transform: translateY(-100px);
+
+  40% {
+    transform: rotate(50deg) scale(0.8);
   }
 }
 
-@keyframes slide-5 {
-  12.5% {
-    transform: translate(-100px, 0px);
+@keyframes tap-upper-4 {
+  0%, 50%, 100% {
+    transform: rotate(10deg) scale(1);
   }
-  87.5% {
-    transform: translate(-100px, 0px);
-  }
-  100% {
-    transform: translate(-100px, 100px);
+
+  40% {
+    transform: rotate(50deg) scale(1);
   }
 }
 
-@keyframes slide-6 {
-  62.5% {
-    transform: translateY(0px);
-  }
-  75% {
-    transform: translateY(-100px);
-  }
-  100% {
-    transform: translateY(-100px);
-  }
-}
-
-@keyframes slide-7 {
-  75%  {
-    transform: translateX(0px);
-  }
-  87.5% {
-    transform: translateX(-100px);
-  }
-  100% {
-    transform: translateX(-100px);
-  }
-}
