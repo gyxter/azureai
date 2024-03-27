@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/azureai/seometa-generator-from-article/static/css/main.89913537.css",
-    "main.js": "/azureai/seometa-generator-from-article/static/js/main.bc33f818.js",
-    "index.html": "/azureai/seometa-generator-from-article/index.html",
-    "main.89913537.css.map": "/azureai/seometa-generator-from-article/static/css/main.89913537.css.map",
-    "main.bc33f818.js.map": "/azureai/seometa-generator-from-article/static/js/main.bc33f818.js.map"
+    "main.css": "/azureai/static/css/main.89913537.css",
+    "main.js": "/azureai/static/js/main.72caafd5.js",
+    "index.html": "/azureai/index.html",
+    "main.89913537.css.map": "/azureai/static/css/main.89913537.css.map",
+    "main.72caafd5.js.map": "/azureai/static/js/main.72caafd5.js.map"
   },
   "entrypoints": [
     "static/css/main.89913537.css",
-    "static/js/main.bc33f818.js"
+    "static/js/main.72caafd5.js"
   ]
 }
