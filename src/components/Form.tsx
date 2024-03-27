@@ -18,7 +18,8 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
        `Meta title, Meta description, URL Structure and Meta keywords.`
        
        let promptGpt35 = `From this Post, generate 5 values of Meta title, Meta description, URL Structure and Meta keywords and add them as table rows inside <tbody> below:`+
-       `<table><thead><tr><th>Meta title</th><th>Meta description</th><th>URL Structure</th><th>Meta keywords</th></tr></thead><tbody></tbody></table>`
+       `<table><thead><tr><th>Meta title</th><th>Meta description</th><th>URL Structure</th><th>Meta keywords</th></tr></thead><tbody></tbody></table>`+
+       `Add this before the table: "<h3>Here are some Suggestions</h3>"`
 
        let assembledPrompt = 
         `---Post: """${textAreaValue.length !== 0 ? ' ' + textAreaValue : ''}"""---` +
