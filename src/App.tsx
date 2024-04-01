@@ -11,7 +11,7 @@ import HtmlRender from "./components/HtmlRender";
 import { Form } from "./components/Form";
 
 import CONFIG_OPENAI from "./config/openai";
-import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
+/* import { OpenAIClient, AzureKeyCredential } from "@azure/openai"; */
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
@@ -44,7 +44,7 @@ export default function App() {
     fetchData(_assembledPrompt);
   };
 
-  async function handleSubmit1(_assembledPrompt: any) {
+  /* async function handleSubmit1(_assembledPrompt: any) {
     setAssembledPrompt(_assembledPrompt);
 
     const client = new OpenAIClient(
@@ -73,7 +73,7 @@ export default function App() {
       setShowLoading(false);
       console.log(error);
     }
-  }
+  } */
 
 
   return (

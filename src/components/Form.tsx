@@ -11,6 +11,7 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
     const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextAreaValue(event.target.value);
     };
+    const lengthError = textAreaValue.length < 1600 ? "error" : "d-none";
     function handleFormSubmit() {
         let promptGpt35Instruct = `From this Post, ` +
             `Generate HTML table code with 5 rows. ` +
@@ -30,8 +31,12 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
          `3. URL structure`+
          `4. Page ranking`+
          `5. A list of keywords.`; */
+        if(textAreaValue.length > 1600) {
+            handleSubmit(assembledPrompt);
+        } else {
+            return lengthError;
+        }
 
-        handleSubmit(assembledPrompt);
     }
 
     return (
@@ -42,19 +47,20 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                         <strong>Paste your article here:</strong>
                     </label>
                     <textarea
-                        className="form-control form-textarea"
+                        className="form-control form-textarea "
                         id="inputText"
                         name="inputText"
                         placeholder=""
                         onChange={handleTextAreaChange}
                     >
                     </textarea>
+                    <p className={"my-2 "+lengthError}>Note: Article must contain 1600 or more characters.</p>
                 </div>
                 <button
                     type="button"
                     id="submitBtn"
-                    className="btn btn-primary"
-                    disabled={showLoading || textAreaValue.length === 0 ? true : false}
+                    className="btn btn-primary "
+                    disabled={showLoading || textAreaValue.length < 1600 ? true : false}
                     onClick={handleFormSubmit}
                 >
                     <svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" id="Layer_1" className="sparkle">

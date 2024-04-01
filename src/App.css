@@ -115,7 +115,9 @@ iframe {
 }
 #loading svg {
   transform: rotate(45deg) scale(0.7);
-
+}
+p.error {
+  color: red;
 }
 .loader {
   position: absolute;
