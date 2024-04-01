@@ -5,7 +5,7 @@ body { font-family: 'Open Sans', sans-serif; }
 .form-select,
 .form-control {
   width: 500px;
-  border: 2px solid darkmagenta;
+  box-shadow: 0px 0px 24px -5px inset rgba(0,0,0,0.2);
   border-radius: 10px;
   font-size: 14px;
 }
@@ -13,43 +13,92 @@ body { font-family: 'Open Sans', sans-serif; }
   height: 300px;
   width: 100%;
 }
-.toggleView {
+.toggle-view {
   width: 100%;
+  overflow: auto;
+  box-shadow: 0px 0px 24px -5px inset rgba(0,0,0,0.2);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 30px;
 }
 #prompt {
   font-size:14px;
 }
-.toggleView table,
-.toggleView td,
-.toggleView th {
+.toggle-view table,
+.toggle-view td,
+.toggle-view th {
   border: 2px solid black;
-}
-.toggleView td,
-.toggleView th {
   padding: 0 10px;
+}
+@media (max-width: 960px) {
+  .toggle-view {
+  }
+  .toggle-view table{
+    width: 960px;
+  }
+}
+.toggle-view table{
+  border-radius: 10px;
 }
 .form-select {
   height: inherit;
   width: 100%;
 }
+.btn {
+  border: none;
+  width: 12em;
+  height: 5em;
+  border-radius: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: #1C1A1C;
+  cursor: pointer;
+  transition: all 450ms ease-in-out;
+}
+
+.sparkle {
+  fill: #AAAAAA;
+  transition: all 800ms ease;
+}
+
+.text {
+  font-weight: 600;
+  color: #AAAAAA;
+  font-size: medium;
+}
+
+.btn:hover {
+  background: linear-gradient(0deg,#A47CF3,#683FEA);
+  box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4),
+  inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+  0px 0px 0px 4px rgba(255, 255, 255, 0.2),
+  0px 0px 180px 0px #9917FF;
+  transform: translateY(-2px);
+}
+
+.btn:hover .text {
+  color: white;
+}
+
+.btn:hover .sparkle {
+  fill: white;
+  transform: scale(1.2);
+} 
 .btn-primary,
 .btn-primary:focus {
-  height: 40px;
   font-size: 14px;
   padding: 0 10px;
-  background-color: darkmagenta;
-  border-radius: 10px;
   color: white;
-  border: 2px solid darkmagenta;
 }
 .btn-primary:hover,
 .btn.btn-primary:active,
 .btn.btn-primary:focus-visible{
-  background-color:purple;
   border: 2px solid transparent;
 }
 .btn-primary[disabled]{
-  background-color:rgba(139, 0, 139,0.5);
+  background-color:gray;
   border: 2px solid transparent;
 }
 #dlBtn{
@@ -135,8 +184,8 @@ iframe {
   height: 60px;
   margin-left: 80px;
   transform: scale(0.5);
-  top: -50px;
-  left: 40px;
+  top: -70px;
+  left: 125px;
 }
 
 .🤚:before {

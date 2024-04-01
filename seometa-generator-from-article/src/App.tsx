@@ -18,17 +18,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export default function App() {
   const [processedOutput, setProcessedOutput] = useState("");
   const [showLoading, setShowLoading] = useState(false);
-  const [showCode, setShowCode] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [assembledPrompt, setAssembledPrompt] = useState("");
-
-  const handleToggleShowCode = ()=> {
-    showCode ? setShowCode(false) : setShowCode(true);
-  }
-  /* 
-  const handleDownload = ()=> {
-    fileDownload(processedOutput, "sample.html");
-  } */
-
   
   const genAI = new GoogleGenerativeAI(
     CONFIG_OPENAI.API_KEY
@@ -39,16 +30,16 @@ export default function App() {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const prompt = assembledPrompt;
     setShowLoading(true);
+    setDataLoaded(false);
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
     setProcessedOutput(text);
+    setDataLoaded(true);
     setShowLoading(false);
   };
   async function handleSubmit(_assembledPrompt: any) {
     // show loading before api call
-
-    
     setAssembledPrompt(_assembledPrompt);
     fetchData(_assembledPrompt);
   };
@@ -65,7 +56,6 @@ export default function App() {
 
     //reset value before submit
     setProcessedOutput("");
-    setShowCode(false);
 
     //api call
     try {
@@ -113,17 +103,10 @@ export default function App() {
               </div>
             </div> */}
 
-            <div id="prompt" className="my-3 d-none">
-              <a href="#view" id="toggleBtn" onClick={handleToggleShowCode}>
-                {showCode ? "Hide" : "View"} Prompt
-              </a>
-              <p className={showCode !== false ? "my-3 d-block" : "d-none"}><strong>Prompt: {assembledPrompt.split('<br/>')[1]}</strong></p>
-              
-            </div>
             {showLoading && <Loading />}
 
             {/* render output */}
-            <HtmlRender processedOutput={processedOutput} />
+            <HtmlRender dataLoaded={dataLoaded} processedOutput={processedOutput} />
           </div>
         </div>
       </div>

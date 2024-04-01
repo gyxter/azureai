@@ -1,11 +1,13 @@
 import parse from 'html-react-parser'
 
 interface HtmlRenderProps {
-  processedOutput: string
+  processedOutput: string,
+  dataLoaded: boolean
 }
-function HtmlRender({processedOutput} : HtmlRenderProps) {
+function HtmlRender({processedOutput, dataLoaded} : HtmlRenderProps) {
+  const hasLoaded = dataLoaded ? 'toggle-view' : '';
   return (
-    <div id="htmlRender" className="toggleView mt-3">
+    <div id="htmlRender" className={'mt-3 '+hasLoaded}>
       {parse(processedOutput)}
     </div>
   );
