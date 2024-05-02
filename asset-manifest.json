@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/azureai/static/css/main.7fbda494.css",
-    "main.js": "/azureai/static/js/main.97fa06a6.js",
+    "main.css": "/azureai/static/css/main.36f64d57.css",
+    "main.js": "/azureai/static/js/main.16bb050b.js",
     "index.html": "/azureai/index.html",
-    "main.7fbda494.css.map": "/azureai/static/css/main.7fbda494.css.map",
-    "main.97fa06a6.js.map": "/azureai/static/js/main.97fa06a6.js.map"
+    "main.36f64d57.css.map": "/azureai/static/css/main.36f64d57.css.map",
+    "main.16bb050b.js.map": "/azureai/static/js/main.16bb050b.js.map"
   },
   "entrypoints": [
-    "static/css/main.7fbda494.css",
-    "static/js/main.97fa06a6.js"
+    "static/css/main.36f64d57.css",
+    "static/js/main.16bb050b.js"
   ]
 }
