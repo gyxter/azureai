@@ -3,15 +3,12 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import { useState } from "react";
 
-//https://www.npmjs.com/package/js-file-download
-//import fileDownload from "js-file-download";
-
-import Loading from "./components/Loading";
+/* import Loading from "./components/Loading"; */
 import HtmlRender from "./components/HtmlRender";
 import { Form } from "./components/Form";
 
 import CONFIG_OPENAI from "./config/openai";
-/* import { OpenAIClient, AzureKeyCredential } from "@azure/openai"; */
+import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
@@ -38,13 +35,13 @@ export default function App() {
     setProcessedOutput(text);
     setShowLoading(false);
   };
-  async function handleSubmit(_assembledPrompt: any) {
+  async function handleSubmit1(_assembledPrompt: any) {
     // show loading before api call
     setAssembledPrompt(_assembledPrompt);
     fetchData(_assembledPrompt);
   };
 
-  /* async function handleSubmit1(_assembledPrompt: any) {
+  async function handleSubmit(_assembledPrompt: any) {
     setAssembledPrompt(_assembledPrompt);
 
     const client = new OpenAIClient(
@@ -54,6 +51,7 @@ export default function App() {
     // show loading before api call
     setShowLoading(true);
 
+    setDataLoaded(false)
     //reset value before submit
     setProcessedOutput("");
 
@@ -65,15 +63,16 @@ export default function App() {
         })
         .then((result) => {
           setShowLoading(false);
+          setDataLoaded(true);
           for (const choice of result.choices) {
-            setProcessedOutput("<h3>Here are some Suggestions</h3>"+choice.text);
+            setProcessedOutput(choice.text);
           }
         });
     } catch (error) {
       setShowLoading(false);
       console.log(error);
     }
-  } */
+  }
 
 
   return (
@@ -92,7 +91,7 @@ export default function App() {
         <div className="row">
           <div className="col-12">
 
-            {showLoading && <Loading />}
+           {/*  {showLoading && <Loading />} */}
 
             {/* render output */}
             <HtmlRender dataLoaded={dataLoaded} processedOutput={processedOutput} />

@@ -13,7 +13,8 @@ import { Form } from "./components/Form";
 
 import CONFIG_OPENAI from "./config/openai";
 import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+
+
 export default function App() {
   /* let [userInput, setUserInput] = useState<any | null>(null); */
   const [processedOutput, setProcessedOutput] = useState("");
@@ -21,16 +22,13 @@ export default function App() {
   const [showCode, setShowCode] = useState(false);
   const [assembledPrompt, setAssembledPrompt] = useState("");
 
-  const genAI = new GoogleGenerativeAI(
-    CONFIG_OPENAI.API_KEY
-  );
-
   const handleToggleShowCode = ()=> {
     showCode ? setShowCode(false) : setShowCode(true);
   }
 
   const handleDownload = ()=> {
-    fileDownload(processedOutput, "sample.html");
+    //fileDownload(processedOutput, processedOutput);
+    window.open(processedOutput, "_blank");
   }
 
   let renderOutput;
@@ -45,22 +43,8 @@ export default function App() {
       );
     }
   }
-  const fetchData = async (assembledPrompt: any) => {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    const prompt = assembledPrompt;
-    setShowLoading(true);
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    setProcessedOutput(text);
-    setShowLoading(false);
-  };
-  async function handleSubmit(_assembledPrompt: any) {
-    setAssembledPrompt(_assembledPrompt);
-    fetchData(_assembledPrompt);
-  };
 
-  async function handleSubmit1(_assembledPrompt: any) {
+  async function handleSubmit(_assembledPrompt: any, getSize: string) {
     setAssembledPrompt(_assembledPrompt);
 
     const client = new OpenAIClient(
@@ -73,17 +57,16 @@ export default function App() {
     //reset value before submit
     setProcessedOutput("");
     setShowCode(false);
-
     //api call
+    const n = 1;
+    const size = getSize;
     try {
       await client
-        .getCompletions(CONFIG_OPENAI.DEPLOYMENT_NAME, _assembledPrompt, {
-          maxTokens: 5000,
-        })
-        .then((result) => {
+        .getImages(CONFIG_OPENAI.DEPLOYMENT_NAME, _assembledPrompt, { n, size })
+        .then((results) => {
           setShowLoading(false);
-          for (const choice of result.choices) {
-            setProcessedOutput(choice.text);
+          for (const image  of results.data) {
+            setProcessedOutput(`${image.url}`);
           }
         });
     } catch (error) {
@@ -99,10 +82,10 @@ export default function App() {
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <h1 className="my-3">Email CRM HTML Generator:</h1>
+            <h1 className="my-3">Dall-e 3 test:</h1>
           </div>
 
-          <Form showLoading={showLoading} handleSubmit={(assembledPrompt)=>handleSubmit(assembledPrompt)}/>
+          <Form showLoading={showLoading} handleSubmit={(assembledPrompt,getSize)=>handleSubmit(assembledPrompt,getSize)}/>
 
         </div>
       </div>
@@ -116,13 +99,19 @@ export default function App() {
               <button id="dlBtn" type="button" className="btn btn-info ml-2" onClick={handleDownload}>
                 Download
               </button>
-             {/*  <div id="prompt">
+              {/* <div id="prompt">
                 <strong>{assembledPrompt}</strong>
               </div> */}
             </div>
 
             {showLoading && <Loading />}
 
+          </div>
+        </div>
+      </div>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-12">
             {/* render output */}
             {renderOutput}
           </div>
