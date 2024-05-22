@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
-import { PageComponents } from './PageComponent';
-import { moods, pages } from '../utils/data';
+import React, { ChangeEvent, useState } from 'react'
+import { PageComponentOptions } from './PageComponentOptions';
+import { moods, pages, imagesOptions } from '../utils/data';
 import "../App.css";
+import Select from './Select';
+import ImageComponentOptions from './ImageComponentOptions';
 
 interface FormProps {
     showLoading: boolean,
@@ -15,26 +17,26 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
     const [textAreaValue, setTextAreaValue] = useState<any | null>('');
     const [radioOption, setRadioOption] = useState<string>('');
 
-    const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handlePageChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedOption(event.target.value);
     };
 
-    const handleMoodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleMoodChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedOption1(event.target.value);
     };
 
-    const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
         setRadioOption(event.target.value);
     };
 
-    const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleCheckBoxChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCheckBoxValues({
             ...checkBoxValues,
             [event.target.name]: event.target.checked,
         });
     };
 
-    const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleTextAreaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setTextAreaValue(event.target.value);
     };
 
@@ -59,35 +61,13 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
         <div>
             <div className="col-md-4">
                 <div className="mb-3">
-                    <label className="form-label" htmlFor="page">
-                        Page:{" "}
-                    </label>
-                    <br />
-                    <select id="page" name="page" className="form-select" onChange={handlePageChange}>
-                        {pages.map((page) => (
-                            <option key={page.name} value={page.name}>{page.text}</option>
-                        ))}
-                    </select>
+                    <Select id="page" heading="Page" optionList={pages} handleChange={handlePageChange}/>
                 </div>
                 <div className="mb-3">
-                    <label className="form-label" htmlFor="mood">
-                        Mood:{" "}
-                    </label>
-                    <br />
-                    <select id="mood" name="mood" className="form-select" onChange={handleMoodChange}>
-                        {moods.map((mood) => (
-                            <option key={mood.name} value={mood.name}>{mood.text}</option>
-                        ))}
-                    </select>
+                    <Select id="mood" heading="Mood" optionList={moods} handleChange={handleMoodChange}/>
                 </div>
                 <div className="mb-3">
-                    <label className="form-label" htmlFor="components">
-                        Components:{" "}
-                    </label>
-                    <br />
-
-                    <PageComponents handleCheckBoxChange={handleCheckBoxChange} />
-
+                    <PageComponentOptions heading="Components" handleCheckBoxChange={handleCheckBoxChange} />
                 </div>
                 <div className="mb-3">
                     <label className="form-label" htmlFor="plImages">

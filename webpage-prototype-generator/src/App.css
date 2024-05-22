@@ -16,6 +16,9 @@ body { font-family: 'Open Sans', sans-serif; }
   height: inherit;
   width: 100%;
 }
+.form-label {
+  display: block;
+}
 .btn-primary {
   height: 40px;
   font-size: 14px;

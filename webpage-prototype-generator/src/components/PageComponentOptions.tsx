@@ -1,10 +1,12 @@
+import { ChangeEvent } from "react";
 import { components } from "../utils/data";
 
-interface PageComponentsProps {
-    handleCheckBoxChange: React.ChangeEventHandler<HTMLInputElement>
+interface PageComponentOptionsProps {
+    heading: string;
+    handleCheckBoxChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-export function PageComponents({handleCheckBoxChange}: PageComponentsProps) {
+export function PageComponentOptions({ heading, handleCheckBoxChange }: PageComponentOptionsProps) {
 
     const listItems = components.map(compnent =>
         <label htmlFor={compnent.name} key={compnent.name} className="me-3">
@@ -20,5 +22,10 @@ export function PageComponents({handleCheckBoxChange}: PageComponentsProps) {
         </label>
     );
 
-    return (<div>{listItems}</div>);
+    return (<>
+        <label className="form-label">
+            {heading}:
+        </label>
+        {listItems}
+    </>);
 }

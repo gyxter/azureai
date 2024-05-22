@@ -16,3 +16,8 @@ export const pages = [
     {name: "Services Page", text: "Services"},
     {name: "Contact Page", text: "Contact"}
 ]
+
+export const imagesOptions = [
+    {id: "plImagesY", name: "placeholderImages", value: "with placeholder images", text: "Yes"},
+    {id: "plImagesN", name: "placeholderImages", value: "", text: "No"}
+]
