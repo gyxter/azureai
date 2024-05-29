@@ -1,5 +1,5 @@
-/* import parse from 'html-react-parser'
-import { ChatCompletionMessage } from 'openai/resources';
+/* import parse from 'html-react-parser' */
+/* import { ChatCompletionMessage } from 'openai/resources';
 import { ReactNode } from 'react'; */
 
 interface HtmlRenderProps {

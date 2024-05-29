@@ -12,7 +12,7 @@ import { AzureOpenAI } from "openai"
 /* import { GoogleGenerativeAI } from "@google/generative-ai"; */
 
 export default function App() {
-  const [processedOutput,setProcessedOutput] = useState<any>();
+  const [processedOutput,setProcessedOutput] = useState<unknown>();
   const [showLoading, setShowLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [assembledPrompt, setAssembledPrompt] = useState("");
@@ -40,7 +40,7 @@ export default function App() {
     fetchData(_assembledPrompt);
   }; */
 
-  async function handleSubmitGpt4(_assembledPrompt: any) {
+  async function handleSubmitGpt4(_assembledPrompt: string) {
     setAssembledPrompt(_assembledPrompt);
     const endpoint = CONFIG_OPENAI.ENDPOINT;
     const apiKey = CONFIG_OPENAI.API_KEY;
@@ -69,7 +69,8 @@ export default function App() {
               content: [
                 {
                   type: "text",
-                  text: _assembledPrompt+" ---Generate 5 values of Meta title, Meta description, Meta keywords and URL Structure, then display them as html table data rows and remove any non html---",
+                  text: _assembledPrompt+" ---From previous post, generate 5 values of Meta title, Meta description, Meta keywords and URL Structure and then add them as table rows inside the <tbody> here:"+
+                  "'<table><thead><tr><th>Meta title</th><th>Meta description</th><th>URL Structure</th><th>Meta keywords</th></tr></thead><tbody></tbody></table>'. Only respond with HTML code.---",
                 },
               ]
             },
