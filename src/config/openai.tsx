@@ -6,7 +6,8 @@ const CONFIG_OPENAI = {
 
     "ENDPOINT": 'https://ai-sampler.openai.azure.com',
     "API_KEY": 'e27045c6c5f4408db31d464f9d98e843',
-    "DEPLOYMENT_NAME": "gpt-35-turbo-instruct"
+    "DEPLOYMENT_NAME": "gpt-4o",
+    "API_VERSION":"2024-05-01-preview"
     /* "ENDPOINT": 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
     "API_KEY": 'AIzaSyDoXqUrvWKb1-Ro8XOAWC0TZaFxZmx4QQg',
     "DEPLOYMENT_NAME": "sampler" */
