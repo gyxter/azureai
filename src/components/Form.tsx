@@ -6,23 +6,37 @@ interface FormProps {
     handleSubmit: (assembledPrompt: string) => Promise<void>,
 }
 export function Form({ showLoading, handleSubmit }: FormProps) {
-    const [textAreaValue, setTextAreaValue] = useState<any | null>('');
+    const [textAreaValue, setTextAreaValue] = useState('');
+    const [inputUrlValue, setInputUrlValue] = useState('');
+    const urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?/;
+    const [inputMethod, setInputMethod] = useState<number>(0);
 
     const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextAreaValue(event.target.value);
     };
+    const handleInputUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputUrlValue(event.target.value);
+    };
+    const handleInputRadioChange = (inputMethod: number) => {
+        setInputMethod(inputMethod);
+    };
+    const inputMethod1 = inputMethod === 1 ? 'd-block' : 'd-none'
+    const inputMethod2 = inputMethod === 2 ? 'd-block' : 'd-none'
     const lengthError = textAreaValue.length < 500 ? "error" : "d-none";
     function handleFormSubmit() {
 
-        /* let promptGpt35 = `From this Post, generate 5 values of Meta title, Meta description, URL Structure and Meta keywords and add them as table rows inside <tbody> here:` +
-            `<table><thead><tr><th>Meta title</th><th>Meta description</th><th>Meta keywords</th><th>URL Structure</th></tr></thead><tbody></tbody></table>` */
-            
-
-        let assembledPrompt =
-            `---Post: ${textAreaValue.length !== 0 ? ' ' + textAreaValue : ''}---` /* +
-            `---` + promptGpt35 + `---` */
+        console.log(inputMethod);
         
-        if(textAreaValue.length > 500) {
+        
+        let assembledPrompt: string = "";
+        if(inputMethod === 1 && textAreaValue.length > 0){
+            assembledPrompt = `---Post: ${textAreaValue}---`
+        }
+        if(inputMethod === 2 && inputUrlValue.length > 0){
+            assembledPrompt = `${inputUrlValue}`
+        }
+        if(textAreaValue.length > 500 || inputUrlValue.match(urlRegex)) {
+            
             handleSubmit(assembledPrompt);
         } else {
             return lengthError;
@@ -34,25 +48,57 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
         <div>
             <div className="col-12">
                 <div className="mb-3">
-                    <label className="form-label" htmlFor="tailored">
+                    <label className="form-label" htmlFor="inputMethod">
+                        <strong>Choose your input:</strong>
+                    </label>
+                    <div className="form-check">
+                        <input checked={inputMethod === 1} onChange={e => {}} onClick={(e) => handleInputRadioChange(1)} className="form-check-input" type="radio" name="flexRadioDefault" id="articleRadio" />
+                        <label className="form-check-label" htmlFor="articleRadio">
+                            Paste your article
+                        </label>
+                    </div>
+                    <div className="form-check">
+                        <input checked={inputMethod === 2} onChange={e => {}} onClick={(e) => handleInputRadioChange(2)} className="form-check-input" type="radio" name="flexRadioDefault" id="articleUrl" />
+                        <label className="form-check-label" htmlFor="articleUrl">
+                            Paste the url of your article
+                        </label>
+                    </div>
+                    {/* <p className={"my-2 "+lengthError}>Note: Article must contain 1600 or more characters.</p> */}
+                </div>
+                <div className={'mb-3 ' + inputMethod1}>
+                    <label className="form-label" htmlFor="inputText">
                         <strong>Paste your article here:</strong>
                     </label>
                     <textarea
-                        className="form-control form-textarea "
+                        className="form-control form-textarea mb-3"
                         id="inputText"
                         name="inputText"
                         placeholder=""
                         onChange={handleTextAreaChange}
                     >
                     </textarea>
-                    {/* <p className={"my-2 "+lengthError}>Note: Article must contain 1600 or more characters.</p> */}
+                    
+                </div>
+                <div className={'mb-3 ' + inputMethod2}>
+                    <label className="form-label" htmlFor="inputText">
+                        <strong>Paste the url of your article below:</strong>
+                    </label>
+                    <input 
+                        className="form-control"
+                        type="text" 
+                        name="inputUrl" 
+                        id="inputUrl" 
+                        placeholder="Add staging URL of the article or post"                    
+                        onChange={handleInputUrlChange}  
+                        autoComplete="off"
+                    />
                 </div>
                 <div className="sp">
                     <button
                         type="button"
                         id="submitBtn"
                         className={showLoading ? "loading sparkle-button" : "sparkle-button"}
-                        disabled={showLoading || textAreaValue.length < 500 ? true : false}
+                        disabled={showLoading /* || (textAreaValue.length < 500 || inputUrlValue.match(urlRegex)) */ ? true : false}
                         onClick={handleFormSubmit}
                     >
                         <span className="spark"></span>

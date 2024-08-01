@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
-import { useState } from "react";
 /* import Loading from "./components/Loading"; */
 import HtmlRender from "./components/HtmlRender";
 import { Form } from "./components/Form";
 
 import CONFIG_OPENAI from "./config/openai";
-/* import { OpenAIClient, AzureKeyCredential } from "@azure/openai"; */
 import { AzureOpenAI } from "openai"
 /* import { GoogleGenerativeAI } from "@google/generative-ai"; */
 
@@ -15,6 +13,7 @@ export default function App() {
   const [processedOutput,setProcessedOutput] = useState<unknown>();
   const [showLoading, setShowLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?/;
   const [assembledPrompt, setAssembledPrompt] = useState("");
   
   /* const genAI = new GoogleGenerativeAI(
@@ -39,86 +38,132 @@ export default function App() {
     setAssembledPrompt(_assembledPrompt);
     fetchData(_assembledPrompt);
   }; */
+  const endpoint = CONFIG_OPENAI.ENDPOINT;
+  const apiKey = CONFIG_OPENAI.API_KEY;
+  const apiVersion = CONFIG_OPENAI.API_VERSION;
+  const deployment = CONFIG_OPENAI.DEPLOYMENT_NAME; //This must match your deployment name.
+  const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment, dangerouslyAllowBrowser: true});
 
-  async function handleSubmitGpt4(_assembledPrompt: string) {
-    setAssembledPrompt(_assembledPrompt);
-    const endpoint = CONFIG_OPENAI.ENDPOINT;
-    const apiKey = CONFIG_OPENAI.API_KEY;
-    const apiVersion = CONFIG_OPENAI.API_VERSION;
-    const deployment = CONFIG_OPENAI.DEPLOYMENT_NAME; //This must match your deployment name.
-    const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment, dangerouslyAllowBrowser: true});
+  async function handleSubmitGpt4(_assembledPrompt: any) {
+    //setAssembledPrompt(_assembledPrompt);
     // show loading before api call
     setShowLoading(true);
 
     setDataLoaded(false)
     //reset value before submit
     setProcessedOutput("");
-
+   console.log('out of gpt', _assembledPrompt);
+    const queryURL = _assembledPrompt ?? "";
+    if(_assembledPrompt.match(urlRegex)){
+      await fetch(_assembledPrompt,{
+        mode: "no-cors"
+      })
+            .then(response => response.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, 'text/html');
+              
+              const mainH1 = doc.querySelector<HTMLElement>("main h1")?.innerText;
+              const mainH2 =  doc.querySelector<HTMLElement>("main h2")?.innerText;
+              const mainP = doc.querySelectorAll<HTMLElement>("main p");
+              let pars: string[] = [] 
+              mainP.forEach((elem: HTMLElement) => {
+                pars.push(elem.innerText);   
+              });
+              _assembledPrompt = (mainH1 ?? " ") + (mainH2 ?? " ") + pars.join(' ') ?? " ";    
+            }
+            ).catch(function (err) {
+              // There was an error
+              console.warn('Something went wrong.', err);
+            });
+      
+    }
     //api call
-    try {
+    try {      
+     console.log('for gpt', _assembledPrompt);
       await client.chat.completions.create({
         model: "gpt-4o",
         max_tokens: 4096,
         messages: [
             {
               role: "system",
-              content: "You are an expert SEO Data Analyst and Front end developer",
+              content: "You are an expert SEO data analyst and front end developer. Given the following Post or URL of the page article, generate 5 values of Meta title, description, keywords and URL Structure and then add it in an HTML table format. "+
+              "Only respond with HTML code without the ```html.",
             },
             {
               role: "user",
-              content: [
-                {
-                  type: "text",
-                  text: _assembledPrompt+" ---From previous post, generate 5 values of Meta title, Meta description, Meta keywords and URL Structure and then add them as table rows inside the <tbody> here:"+
-                  "'<table><thead><tr><th>Meta title</th><th>Meta description</th><th>URL Structure</th><th>Meta keywords</th></tr></thead><tbody></tbody></table>'. Only respond with HTML code.---",
-                },
-              ]
+              content: _assembledPrompt,
+              
             },
           ]
         })
         .then((result) => {
           setShowLoading(false);
           setDataLoaded(true);
+          
           for (const choice of result.choices) {
-            setProcessedOutput(choice.message.content);
+            if (choice.message.content !== null) {
+              setProcessedOutput(choice.message.content);
+            }
           }
+          console.log(queryURL)
+          if(queryURL.match(urlRegex)){
+            fetch(queryURL,{
+              mode: "no-cors"
+            })
+              .then(response => response.text())
+              .then(html => {
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(html, 'text/html');
+                  const htmlRender = document.getElementById('htmlRender')
+  
+                  const ogTitleMeta = doc.querySelector<HTMLMetaElement>("meta[property='og:title']");
+                  const ogTitle = ogTitleMeta ? ogTitleMeta.content : "";
+                  const descriptionMeta = doc.querySelector<HTMLMetaElement>("meta[name='description']");
+                  const description = descriptionMeta ? descriptionMeta.content : "";
+                  const keywordsMeta = doc.querySelector<HTMLMetaElement>("meta[name='keywords']");
+                  const keywords = keywordsMeta ? keywordsMeta.content : "";
+                  const ogUrlMeta = doc.querySelector<HTMLMetaElement>("meta[property='og:url']");
+                  const ogUrl = ogUrlMeta ? ogUrlMeta.content : "";
+                  const metaTags = [ogTitle, description, keywords, ogUrl];
+                  if (htmlRender) {
+                    htmlRender.innerHTML = `
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Original meta title</th>
+                            <th>Original Meta description</th>
+                            <th>Original Meta keywords</th>
+                            <th>Original URL Structure</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>${metaTags[0]}</td>
+                            <td>${metaTags[1]}</td>
+                            <td>${metaTags[2]}</td>
+                            <td>${metaTags[3]}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    `+htmlRender.innerHTML;
+                  }
+                  
+                }
+              ).catch(function (err) {
+                // There was an error
+                console.warn('Something went wrong.', err);
+              });
+
+          }
+          
         });
+        
     } catch (error) {
       setShowLoading(false);
       console.log(error);
     }
   }
-  /* async function handleSubmit(_assembledPrompt: any) {
-    setAssembledPrompt(_assembledPrompt);
-
-    const client = new OpenAIClient(
-      CONFIG_OPENAI.ENDPOINT,
-      new AzureKeyCredential(CONFIG_OPENAI.API_KEY)
-    );
-    // show loading before api call
-    setShowLoading(true);
-
-    //reset value before submit
-    setProcessedOutput("");
-
-    //api call
-    try {
-      await client
-        .getCompletions(CONFIG_OPENAI.DEPLOYMENT_NAME, _assembledPrompt, {
-          maxTokens: 4000,
-        })
-        .then((result) => {
-          setShowLoading(false);
-          setDataLoaded(true);
-          for (const choice of result.choices) {
-            setProcessedOutput(choice.text);
-          }
-        });
-    } catch (error) {
-      setShowLoading(false);
-      console.log(error);
-    }
-  } */
 
   return (
     <div className="App">
@@ -129,9 +174,7 @@ export default function App() {
           </div>
           <Form showLoading={showLoading} handleSubmit={(assembledPrompt)=>handleSubmitGpt4(assembledPrompt)}/>
         </div>
-      </div>
-      <div className="container">
-        <div className="row">
+        <div className="row result-cont">
           <div className="col-12">
            {/*  {showLoading && <Loading />} */}
 

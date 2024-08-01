@@ -39,7 +39,7 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
     };
 
     function handleFormSubmit() {
-        let assembledPrompt = `Generate a responsive ${selectedPage} with the following requirements:` +
+        let assembledPrompt = `You are an expert Front end developer. Please generate a responsive ${selectedPage} with the following requirements:` +
         `1. Webpage should have ${selectedMood} colored. ` +
         `2. Webpage should be using bootstrap css. ` +
         `3. Should have a header with placeholder image for the logo and 4 navigation links ` +

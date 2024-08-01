@@ -30,9 +30,10 @@ body { font-family: 'Open Sans', sans-serif; }
   border: 2px solid black;
   padding: 0 10px;
 }
+.toggle-view table:first-child {
+  margin-bottom: 20px;
+}
 @media (max-width: 960px) {
-  .toggle-view {
-  }
   .toggle-view table{
     width: 960px;
   }
@@ -43,19 +44,6 @@ body { font-family: 'Open Sans', sans-serif; }
 .form-select {
   height: inherit;
   width: 100%;
-}
-.btn {
-  border: none;
-  width: 12em;
-  height: 5em;
-  border-radius: 3em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  background: #1C1A1C;
-  cursor: pointer;
-  transition: all 450ms ease-in-out;
 }
 
 .sparkle {
@@ -69,14 +57,6 @@ body { font-family: 'Open Sans', sans-serif; }
   font-size: medium;
 }
 
-.btn:hover {
-  background: linear-gradient(0deg,#A47CF3,#683FEA);
-  box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4),
-  inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
-  0px 0px 0px 4px rgba(255, 255, 255, 0.2),
-  0px 0px 180px 0px #9917FF;
-  transform: translateY(-2px);
-}
 
 .btn:hover .text {
   color: white;
@@ -332,6 +312,7 @@ p.error {
   }
 }
 
+.sparkle-button:disabled,
 .sparkle-button,
 .sparkle-button.loading{
   --active: 0;
@@ -488,7 +469,7 @@ p.error {
 }
 
 @supports(selector(:has(:is(+ *)))) {
-  body:has(button:is(:hover, :focus-visible)) {
+  body:has(button:is(:hover, :focus-visible):not(:disabled)) {
     --active: 1;
     --play-state: running;
   }
@@ -498,12 +479,12 @@ p.error {
   }
 }
 
-.sparkle-button:is(:hover, :focus-visible) ~ :is(.bodydrop, .particle-pen) {
+.sparkle-button:is(:hover, :focus-visible):not(:disabled) ~ :is(.bodydrop, .particle-pen) {
   --active: 1;
   --play-state: running;
 }
 
-.sparkle-button:is(:hover, :focus-visible),
+.sparkle-button:is(:hover, :focus-visible):not(:disabled),
 .sparkle-button.loading {
   --active: 1;
   --play-state: running;
@@ -566,4 +547,67 @@ p.error {
 .sparkle-button svg {
   inline-size: 1.25em;
   translate: -25% -5%;
+}
+
+.download-btn {
+  --main-focus: #2d8cf0;
+  --font-color: #dedede;
+  --bg-color-sub: #222;
+  --bg-color: #323232;
+  --main-color: #dedede;
+  position: relative;
+  width: 200px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  background-color: var(--bg-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.download-btn, .button__icon, .button__text {
+  transition: all 0.3s;
+}
+
+.download-btn .button__text {
+  transform: translateX(10px);
+  color: var(--font-color);
+  font-weight: 600;
+}
+
+.download-btn .button__icon {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 39px;
+  background-color: var(--bg-color-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.download-btn .svg {
+  width: 20px;
+  fill: var(--main-color);
+}
+
+.download-btn:hover {
+  background: var(--bg-color);
+}
+
+.download-btn:hover .button__text {
+  color: transparent;
+}
+
+.download-btn:hover .button__icon {
+  width: 100%;
+  transform: translateX(0);
+}
+
+.download-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px var(--main-color);
 }
