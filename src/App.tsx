@@ -10,7 +10,7 @@ import { AzureOpenAI } from "openai"
 /* import { GoogleGenerativeAI } from "@google/generative-ai"; */
 
 export default function App() {
-  const [processedOutput,setProcessedOutput] = useState<unknown>();
+  const [processedOutput,setProcessedOutput] = useState<string>("");
   const [showLoading, setShowLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?/;
@@ -43,6 +43,25 @@ export default function App() {
   const apiVersion = CONFIG_OPENAI.API_VERSION;
   const deployment = CONFIG_OPENAI.DEPLOYMENT_NAME; //This must match your deployment name.
   const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment, dangerouslyAllowBrowser: true});
+  const getContentFromUrl = async (url: string): Promise<string> => {
+    try {
+      const response = await fetch(url, { mode: "no-cors" })
+      const html = await response.text()
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(html, 'text/html')
+      
+      const mainH1 = doc.querySelector<HTMLElement>("main h1")?.innerText || ""
+      const mainH2 = doc.querySelector<HTMLElement>("main h2")?.innerText || ""
+      const mainP = doc.querySelectorAll<HTMLElement>("main p")
+      const pars = Array.from(mainP).map(elem => elem.innerText).join(' ')
+      
+      return `${mainH1} ${mainH2} ${pars}`.trim()
+    } catch (error) {
+      console.warn('Error fetching content:', error)
+      return ""
+    }
+  }
+
 
   async function handleSubmitGpt4(_assembledPrompt: any) {
     //setAssembledPrompt(_assembledPrompt);
@@ -52,35 +71,15 @@ export default function App() {
     setDataLoaded(false)
     //reset value before submit
     setProcessedOutput("");
-   console.log('out of gpt', _assembledPrompt);
+   //console.log('out of gpt', _assembledPrompt);
     const queryURL = _assembledPrompt ?? "";
-    if(_assembledPrompt.match(urlRegex)){
-      await fetch(_assembledPrompt,{
-        mode: "no-cors"
-      })
-            .then(response => response.text())
-            .then(html => {
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(html, 'text/html');
-              
-              const mainH1 = doc.querySelector<HTMLElement>("main h1")?.innerText;
-              const mainH2 =  doc.querySelector<HTMLElement>("main h2")?.innerText;
-              const mainP = doc.querySelectorAll<HTMLElement>("main p");
-              let pars: string[] = [] 
-              mainP.forEach((elem: HTMLElement) => {
-                pars.push(elem.innerText);   
-              });
-              _assembledPrompt = (mainH1 ?? " ") + (mainH2 ?? " ") + pars.join(' ') ?? " ";    
-            }
-            ).catch(function (err) {
-              // There was an error
-              console.warn('Something went wrong.', err);
-            });
+    if(queryURL.match(urlRegex)){
+      _assembledPrompt = await getContentFromUrl(_assembledPrompt) || _assembledPrompt
       
     }
     //api call
     try {      
-     console.log('for gpt', _assembledPrompt);
+     //console.log('for gpt', _assembledPrompt);
       await client.chat.completions.create({
         model: "gpt-4o",
         max_tokens: 4096,
@@ -116,7 +115,7 @@ export default function App() {
                   const parser = new DOMParser();
                   const doc = parser.parseFromString(html, 'text/html');
                   const htmlRender = document.getElementById('htmlRender')
-  
+                  console.log(html)
                   const ogTitleMeta = doc.querySelector<HTMLMetaElement>("meta[property='og:title']");
                   const ogTitle = ogTitleMeta ? ogTitleMeta.content : "";
                   const descriptionMeta = doc.querySelector<HTMLMetaElement>("meta[name='description']");
@@ -154,14 +153,13 @@ export default function App() {
                 // There was an error
                 console.warn('Something went wrong.', err);
               });
-
           }
           
         });
         
-    } catch (error) {
+    } catch (error:any) {
       setShowLoading(false);
-      console.log(error);
+      alert(error.message);
     }
   }
 
@@ -179,7 +177,7 @@ export default function App() {
            {/*  {showLoading && <Loading />} */}
 
             {/* render output */}
-            <HtmlRender dataLoaded={dataLoaded} processedOutput={processedOutput} />
+            <HtmlRender {...{dataLoaded, processedOutput}} />
           </div>
         </div>
       </div>

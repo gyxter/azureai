@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: relative;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+            display: none;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            font-size: 14px;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: .25rem;
+        }
+
+        .dropdown-menu li {
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .dropdown-menu label {
+            flex-grow: 1;
+        }
+        .dropdown-menu li:hover {
+            background-color: #f8f9fa;
+        }
+
+        .pill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .pill {
+            display: flex;
+            align-items: center;
+            padding: 0 5px 0 10px;
+            background-color: #aaddee;
+            border-radius: 20px;
+        }
+
+
+        .pill button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+        }
+        .fancy-button {
+            
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .fancy-button:hover {
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle fancy-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Options
+        </button>       
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="display: none;">
+            <li><input type="checkbox" id="option1" name="option1" value="Option 1"><label for="option1">Option 1</label></li>
+            <li><input type="checkbox" id="option2" name="option2" value="Option 2"><label for="option2">Option 2</label></li>
+            <li><input type="checkbox" id="option3" name="option3" value="Option 3"><label for="option3">Option 3</label></li>
+        </ul>
+    </div>
+
+    <div class="pill-container">
+        <!-- Selected options will be displayed here as removable pills -->
+    </div>
+
+    
+    <script>
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        const pillContainer = document.querySelector('.pill-container');
+
+        dropdownToggle.addEventListener('click', () => {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        const checkboxes = document.querySelectorAll('.dropdown-menu input[type="checkbox"]');
+        
+        function updateButtonText() {
+            const checkedCount = document.querySelectorAll('.dropdown-menu input[type="checkbox"]:checked').length;
+            dropdownToggle.textContent = checkedCount > 0 ? `${checkedCount} selected` : 'Select options';
+        }
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', () => {
+                if (checkbox.checked) {
+                    const pill = document.createElement('div');
+                    pill.classList.add('pill');
+                    pill.innerHTML = `
+                    <span>${checkbox.value}</span>
+                    <button>×</button>
+                    `;
+                    pillContainer.appendChild(pill);
+                } else {
+                    const pills = document.querySelectorAll('.pill');
+                    pills.forEach(pill => {
+                        if (checkbox.value === pill.querySelector('span').textContent.trim()) {
+                            pill.remove();
+                        }
+                    });
+                }
+                updateButtonText();
+            });
+        });
+
+        pillContainer.addEventListener('click', event => {
+            if (event.target.tagName === 'BUTTON') {
+                const pill = event.target.closest('.pill');
+                const checkboxValue = pill.querySelector('span').textContent.trim();
+                const correspondingCheckbox = document.querySelector(`input[value="${checkboxValue}"]`);
+                correspondingCheckbox.checked = false;
+                pill.remove();
+                updateButtonText();
+            }
+        });
+    </script>
+       
+</body>
+</html>
+

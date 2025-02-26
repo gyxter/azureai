@@ -106,7 +106,7 @@ export default function App() {
             {showLoading && <Loading />}
 
             {/* render output */}
-            <HtmlRender dataLoaded={dataLoaded} processedOutput={processedOutput} />
+            <HtmlRender {...{dataLoaded, processedOutput}} />
           </div>
         </div>
       </div>

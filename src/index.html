@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guided Tour</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/5.1.0/introjs.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/5.1.0/intro.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section {
+            background-color: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Guided Tour!</h1>
+
+    <div id="step1" data-intro="Welcome to our website! This guided tour will help you navigate through the different features and sections." data-step="1">
+        <h2>Step 1: Introduction</h2>
+        <p>This is the introduction section of our website.</p>
+        <div class="card">
+            <h3>Card Component</h3>
+            <p>This is a card component that provides additional information or context.</p>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between;">
+        <div id="step4" data-intro="In this step, we'll explore the first feature of our website. Here's a brief description of what it does." data-step="2" style="width: 48%;">
+            <h2>Step 2: Feature 1</h2>
+            <div class="section">
+                <h3>Section 1</h3>
+                <p>This is a section that contains content related to Feature 1.</p>
+            </div>
+        </div>
+
+        <div id="step2" data-intro="Now let's move on to the second feature. This feature allows you to..." data-step="3" style="width: 48%;">
+            <h2>Step 3: Feature 2</h2>
+            <div class="section">
+                <h3>Section 2</h3>
+                <p>This is a section that contains content related to Feature 2.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="step3" data-intro="Next, we'll explore the third feature. This feature provides..." data-step="4" style="margin-left: 25%;">
+        <h2>Step 4: Feature 3</h2>
+        <div class="section">
+            <h3>Section 3</h3>
+            <p>This is a section that contains content related to Feature 3.</p>
+        </div>
+    </div>
+
+    <div id="step5" data-intro="Finally, we've reached the last step of the guided tour. We hope you found it helpful!" data-step="5" style="margin-left: 50%;">
+        <h2>Step 5: Conclusion</h2>
+        <p>This is the conclusion of our guided tour.</p>
+        <div class="card">
+            <h3>Card Component</h3>
+            <p>This is another card component that provides additional information or context.</p>
+        </div>
+    </div>
+
+    <button onclick="startTour()">Start Tour</button>
+
+    <script>
+        function startTour() {
+            introJs().setOptions({
+                steps: [
+                    {
+                        element: document.querySelector('#step1'),
+                        intro: "Welcome to our website! This guided tour will help you navigate through the different features and sections."
+                    },
+                    {
+                        element: document.querySelector('#step2'),
+                        intro: "In this step, we'll explore the first feature of our website. Here's a brief description of what it does."
+                    },
+                    {
+                        element: document.querySelector('#step3'),
+                        intro: "Now let's move on to the second feature. This feature allows you to..."
+                    },
+                    {
+                        element: document.querySelector('#step4'),
+                        intro: "Next, we'll explore the third feature. This feature provides..."
+                    },
+                    {
+                        element: document.querySelector('#step5'),
+                        intro: "Finally, we've reached the last step of the guided tour. We hope you found it helpful!"
+                    }
+                ]
+            }).start();
+        }
+    </script>
+</body>
+</html>

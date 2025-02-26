@@ -69,9 +69,9 @@ export default function App() {
             setProcessedOutput(`${image.url}`);
           }
         });
-    } catch (error) {
+    } catch (error: any) {
       setShowLoading(false);
-      console.log(error);
+      alert(error.message);
     }
   }
 

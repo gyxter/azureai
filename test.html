@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Checkboxes with Pills</title>
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dropdown">
+        <span>Select options</span>
+        <div class="dropdown-content">
+            <label><input type="checkbox" value="Option 1"> Option 1</label><br>
+            <label><input type="checkbox" value="Option 2"> Option 2</label><br>
+            <label><input type="checkbox" value="Option 3"> Option 3</label><br>
+            <label><input type="checkbox" value="Option 4"> Option 4</label>
+        </div>
+    </div>
+
+    <div id="selected-options"></div>
+
+    <script>
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const selectedOptions = document.getElementById('selected-options');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateSelectedOptions);
+        });
+
+        function updateSelectedOptions() {
+            selectedOptions.innerHTML = '';
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const pill = document.createElement('span');
+                    pill.className = 'pill';
+                    pill.textContent = checkbox.value;
+                    selectedOptions.appendChild(pill);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

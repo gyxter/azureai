@@ -19,13 +19,14 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
     };
     const handleInputRadioChange = (inputMethod: number) => {
         setInputMethod(inputMethod);
-    };
+    }; 
     const inputMethod1 = inputMethod === 1 ? 'd-block' : 'd-none'
-    const inputMethod2 = inputMethod === 2 ? 'd-block' : 'd-none'
+     const inputMethod2 = inputMethod === 2 ? 'd-block' : 'd-none'
     const lengthError = textAreaValue.length < 500 ? "error" : "d-none";
+    
     function handleFormSubmit() {
 
-        console.log(inputMethod);
+        console.log(inputUrlValue);
         
         
         let assembledPrompt: string = "";
@@ -51,12 +52,12 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                     <label className="form-label" htmlFor="inputMethod">
                         <strong>Choose your input:</strong>
                     </label>
-                    <div className="form-check">
+                     <div className="form-check">
                         <input checked={inputMethod === 1} onChange={e => {}} onClick={(e) => handleInputRadioChange(1)} className="form-check-input" type="radio" name="flexRadioDefault" id="articleRadio" />
                         <label className="form-check-label" htmlFor="articleRadio">
                             Paste your article
                         </label>
-                    </div>
+                    </div> 
                     <div className="form-check">
                         <input checked={inputMethod === 2} onChange={e => {}} onClick={(e) => handleInputRadioChange(2)} className="form-check-input" type="radio" name="flexRadioDefault" id="articleUrl" />
                         <label className="form-check-label" htmlFor="articleUrl">
@@ -79,7 +80,7 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                     </textarea>
                     
                 </div>
-                <div className={'mb-3 ' + inputMethod2}>
+                 <div className={'mb-3 ' + inputMethod2}>
                     <label className="form-label" htmlFor="inputText">
                         <strong>Paste the url of your article below:</strong>
                     </label>
@@ -98,7 +99,7 @@ export function Form({ showLoading, handleSubmit }: FormProps) {
                         type="button"
                         id="submitBtn"
                         className={showLoading ? "loading sparkle-button" : "sparkle-button"}
-                        disabled={showLoading /* || (textAreaValue.length < 500 || inputUrlValue.match(urlRegex)) */ ? true : false}
+                        disabled={showLoading /* || (textAreaValue.length < 500 || inputUrlValue.match(urlRegex)) ? true : false */}
                         onClick={handleFormSubmit}
                     >
                         <span className="spark"></span>
