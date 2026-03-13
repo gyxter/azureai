@@ -1,11 +1,10 @@
-/* import parse from 'html-react-parser' */
-/* import { ChatCompletionMessage } from 'openai/resources';
-import { ReactNode } from 'react'; */
-/* import handleTableExport from "./CSVDownload"; */
+import React from "react";
+import { OriginalMeta } from "../types";
 
 interface HtmlRenderProps {
-  processedOutput: any;
+  processedOutput: string;
   dataLoaded: boolean;
+  originalMeta: OriginalMeta | null;
 }
 const handleTableExport = () => {
   const htmlRender = document.getElementById("htmlRender");
@@ -17,7 +16,7 @@ const handleTableExport = () => {
       let cols = rows[i].querySelectorAll("td, th");
       for (let j = 0; j < cols.length; j++) {
         //clean innertext
-        let data = (cols[j] as HTMLElement).innerText
+        let data = ((cols[j] as HTMLElement).textContent ?? "")
           .replace(/(\r\n|\n|\r)/gm, "")
           .replace(/(\s\s)/gm, " ");
         //escape innertext quotes
@@ -40,20 +39,18 @@ const downloadCSVFile = (csv: string, filename: string) => {
   link.style.display = "none";
   link.click();
 };
-function HtmlRender({ processedOutput, dataLoaded }: HtmlRenderProps) {
+function HtmlRender({
+  processedOutput,
+  dataLoaded,
+  originalMeta,
+}: HtmlRenderProps) {
   const hasLoaded = dataLoaded ? "toggle-view" : "d-none";
-  const cleanResponse =
-    processedOutput !== undefined
-      ? processedOutput.replace(/```html|```/g, "")
-      : processedOutput;
+  const cleanResponse = processedOutput.replace(/```html|```/g, "");
 
   return (
     <div id="resultCont" className={"mt-3 " + hasLoaded}>
       {dataLoaded ? (
-        <button
-          onClick={handleTableExport}
-          className="mb-3 download-btn"
-        >
+        <button onClick={handleTableExport} className="mb-3 download-btn">
           <span className="button__text">Download as CSV</span>
           <span className="button__icon">
             <svg
@@ -71,6 +68,28 @@ function HtmlRender({ processedOutput, dataLoaded }: HtmlRenderProps) {
         </button>
       ) : (
         ""
+      )}
+      {originalMeta && (
+        <div className="mb-3">
+          <table className="table table-bordered">
+            <thead className="table-secondary">
+              <tr>
+                <th>Original Meta Title</th>
+                <th>Original Meta Description</th>
+                <th>Original Meta Keywords</th>
+                <th>Original URL Structure</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{originalMeta.title}</td>
+                <td>{originalMeta.description}</td>
+                <td>{originalMeta.keywords}</td>
+                <td>{originalMeta.url}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       )}
       <div
         id="htmlRender"
