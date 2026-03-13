@@ -1,15 +1,21 @@
+const requiredEnvVars = {
+  ENDPOINT: process.env.REACT_APP_AZURE_OPENAI_ENDPOINT,
+  API_KEY: process.env.REACT_APP_AZURE_OPENAI_API_KEY,
+  DEPLOYMENT_NAME: process.env.REACT_APP_AZURE_OPENAI_DEPLOYMENT,
+  API_VERSION: process.env.REACT_APP_AZURE_OPENAI_API_VERSION,
+} as const;
 
-const CONFIG_OPENAI = {
-    // "ENDPOINT": 'https://openai-dev-j.openai.azure.com/',
-    // "API_KEY": '9931a8c2ddd0442abbe00f94b7260fc1',
-    //"DEPLOYMENT_NAME": "deployment-openai-dev-j"
+const missingVars = Object.entries(requiredEnvVars)
+  .filter(([, v]) => !v)
+  .map(([k]) => k);
 
-    "ENDPOINT": 'https://ai-sampler.openai.azure.com',
-    "API_KEY": 'e27045c6c5f4408db31d464f9d98e843',
-    "DEPLOYMENT_NAME": "gpt-4o",
-    "API_VERSION":"2024-05-01-preview"
-    /* "ENDPOINT": 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
-    "API_KEY": 'AIzaSyDoXqUrvWKb1-Ro8XOAWC0TZaFxZmx4QQg',
-    "DEPLOYMENT_NAME": "sampler" */
+if (missingVars.length > 0) {
+  throw new Error(
+    `Missing required environment variables: ${missingVars.join(", ")}. ` +
+      "Check your .env.local file.",
+  );
 }
+
+const CONFIG_OPENAI = requiredEnvVars as Record<keyof typeof requiredEnvVars, string>;
+
 export default CONFIG_OPENAI;
